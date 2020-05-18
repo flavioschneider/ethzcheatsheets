@@ -1,0 +1,194 @@
+\documentclass[8pt,a4paper]{extarticle}     % Necessary to make small margin an small text paper.
+\usepackage[utf8]{inputenc}	                % UTF-8 characters.
+\usepackage[landscape, margin=1cm, bmargin=0.5cm, includefoot, footskip=0.5cm]{geometry}            % Necessary for landscape paper.
+\usepackage[textsize=tiny]{todonotes}       % Necessary for small margins.
+\usepackage{enumitem}                       % Necessary for personalized lists.
+\usepackage{mdframed}                       % Necessary for dark gray boxes.
+\usepackage{mathtools}                      % More compact math.
+\usepackage{amsthm}                         % Necessary for theorem boxes.
+\usepackage{amssymb}						% Necessary for mathbb symbols.
+\usepackage{multicol,multirow}              % Necessary for multi column format.
+\usepackage{subfiles}						% Necessary for multiple subfiles
+\usepackage{tabularx}						% Necessary for full-column tables 
+\usepackage{bm}								% Necessary for bold math with \pbm{...}
+\usepackage{xcolor}							% Necessary for custom colors. 
+\usepackage{graphicx}
+\usepackage{accents}						% Necessary for doublehat
+\usepackage{pgfplots}
+\usepackage{fancyhdr}						% Necessary for header/footer settings
+
+% Header / Footer settings
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\rhead{} 
+\lhead{} 
+\chead{} 
+\cfoot{Template $\cdot$ Cheat Sheet}
+\lfoot{Flavio Schneider}
+\rfoot{Page \thepage}
+
+% For Figures
+\usetikzlibrary{decorations.markings}
+\pgfplotsset{compat=1.11}
+
+%---------------------------------------------------%
+% Environments
+%---------------------------------------------------%
+
+\mdtheorem [%
+		backgroundcolor	= black!10,%
+		topline			= false,%
+		bottomline	= false,%
+		leftline		= false,%
+		rightline		= false%
+		]{boxclaim}{Claim}[section]
+		%comment [section] for global numbering
+
+\newmdtheoremenv [%
+		backgroundcolor	= black!10,%
+		topline			= true,%
+		bottomline	= true,%
+		leftline		= false,%
+		rightline		= false,%
+		linewidth		= 0.5pt%
+		]{boxdefinition}{Definition}[section]
+		%comment [section] for global numbering
+
+\mdtheorem [%
+		backgroundcolor	= black!10,%
+		topline			= true,%
+		bottomline	= true,%
+		leftline		= false,%
+		rightline		= false,%
+		linewidth		= 0.5pt%
+		]{boxcriteria}{Criteria}
+
+% Für Sätze
+\mdtheorem [%
+		backgroundcolor	= black!10,%
+		topline			= true,%
+		bottomline	= true,%
+		leftline		= false,%
+		rightline		= false,%
+		linewidth		= 0.5pt%
+		]{boxtheorem}{Theorem}
+
+\mdtheorem [%
+		backgroundcolor	= black!8,%
+		topline			= true,%
+		bottomline	= true,%
+		leftline		= false,%
+		rightline		= false,%
+		linewidth		= 0.5pt%
+		]{boxlemma}{Lemma}[section]
+		%comment [section] for global numbering
+
+\mdtheorem [%
+		backgroundcolor	= black!8,%
+		topline			= true,%
+		bottomline	= true,%
+		leftline		= false,%
+		rightline		= false,%
+		linewidth		= 0.5pt%
+		]{boxcorollary}{Corollary}[section]
+		%comment [section] for global numbering
+
+\mdtheorem [%
+		backgroundcolor	= black!8,%
+		topline			= true,%
+		bottomline		= true,%
+		leftline		= false,%
+		rightline		= false,%
+		linewidth		= 0.5pt%
+		]{boxcollection}{}[section]
+		%comment [section] for global numbering
+
+% Number List 
+\newlist{numberlist}{enumerate}{1}
+\setlist[numberlist, 1]{label={\arabic*.}, itemsep=0em, leftmargin=*,labelindent=0.5em}
+
+% Equation List 
+\newlist{eqlist}{enumerate}{1}
+\setlist[eqlist, 1]{label={(\roman*)},itemsep=-0.2em, leftmargin=*,labelindent=-0.5em}
+
+% Bullet List 
+\newlist{bulletlist}{itemize}{1}
+\setlist[bulletlist, 1]{itemsep=0em, leftmargin=0.5em, label={·}}
+
+% Images in multicol 
+\newenvironment{Figure}
+  {\par\medskip\noindent\minipage{\linewidth}}
+  {\endminipage\par\medskip}
+
+\newcommand\tab[1][0.5em]{\hspace*{#1}}
+
+\newcommand{\sectionbreak}{\clearpage}	% Start each section on new page
+
+\usepackage{array}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+\begin{document}
+
+\begin{titlepage}
+    \begin{center}
+		\vspace*{1cm}
+		
+		\Huge
+        \textbf{Template}
+        
+		\vspace{0.5cm}
+		\Large
+        Cheat Sheet $\cdot$ v1.0 $\cdot$ 2020
+        
+        \vfill
+        
+        Flavio Schneider
+        
+		\vspace{0.8cm}
+		
+        D-INFK\\
+        ETH Zürich       
+    \end{center}
+\end{titlepage}
+
+\begin{multicols}{4}
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+
+\section{Section}
+\subsection{Subsection}
+\begin{eqlist}
+    \item[] Equation list
+	\item $a$
+	\item $b$
+\end{eqlist}
+
+\begin{bulletlist}
+	\item \textbf{Bullet List} text
+	\item item 
+	\item 
+\end{bulletlist}
+
+\begin{boxtheorem}[Theorem]
+    Theorem...
+\end{boxtheorem}
+\subsection{Strategy}
+Strategy text...
+\begin{numberlist}
+	\item Number list
+	\item Number list
+	\item Number list
+\end{numberlist}
+
+\begin{boxdefinition}[Name]
+	\
+	Definition...
+\end{boxdefinition}
+
+\vfill\eject
+\columnbreak
+
+\end{multicols}
+\end{document}
