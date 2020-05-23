@@ -6,7 +6,7 @@ I've created those cheat sheets for exams in the computer science department at 
 
 
 ## Analysis I Cheat Sheet
-[![Generic badge](https://img.shields.io/badge/Version-1.0.0-<COLOR>.svg)](https://github.com/flavioschneider/ethzcheatsheets/cheatsheet_analysis_I.pdf)
+[![Generic badge](https://img.shields.io/badge/Version-1.0.1-<COLOR>.svg)](https://github.com/flavioschneider/ethzcheatsheets/cheatsheet_analysis_I.pdf)
 
 [Download PDF](https://github.com/flavioschneider/ethzcheatsheets/raw/master/cheatsheet_analysis_I.pdf)
 
@@ -22,8 +22,8 @@ Content:
 * Other
 
 
-## Probability & Statistics
-[![Generic badge](https://img.shields.io/badge/Version-1.0.0-<COLOR>.svg)](https://github.com/flavioschneider/ethzcheatsheets/cheatsheet_probability_and_statistics.pdf)
+## Probability & Statistics Cheat Sheet
+[![Generic badge](https://img.shields.io/badge/Version-1.0.1-<COLOR>.svg)](https://github.com/flavioschneider/ethzcheatsheets/cheatsheet_probability_and_statistics.pdf)
 
 [Download PDF](https://github.com/flavioschneider/ethzcheatsheets/raw/master/cheatsheet_probability_and_statistics.pdf)
 
@@ -34,7 +34,7 @@ Content:
 * Random Variables 
 * Estimators 
 * Hypothesis Testing 
-* Discrete/Continous Distributions 
+* Discrete/Continuous Distributions 
 * Other  
 
 _Not all material in the cheat sheets is covered in the respective classes, some of it is just a useful addition._
