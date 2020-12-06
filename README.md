@@ -5,6 +5,9 @@
 I've created those cheat sheets for exams in the computer science department at ETH Zurich. Hopefully this can be useful to anyone interested. If you find any mistakes please let me know!
 
 
+Please consider sponsoring if you think that the cheat sheet are helping you :blush: 
+
+
 ## Analysis I Cheat Sheet
 [![Generic badge](https://img.shields.io/badge/Version-1.0.1-<COLOR>.svg)](https://github.com/flavioschneider/ethzcheatsheets/cheatsheet_analysis_I.pdf)
 

@@ -1,0 +1,1845 @@
+\documentclass[8pt,a4paper]{extarticle}     % Necessary to make small margin an small text paper.
+\usepackage[utf8]{inputenc}	                % UTF-8 characters.
+\usepackage[landscape, margin=1cm, bmargin=0.5cm, includefoot, footskip=0.5cm]{geometry}            % Necessary for landscape paper.
+\usepackage[textsize=tiny]{todonotes}       % Necessary for small margins.
+\usepackage{enumitem}                       % Necessary for personalized lists.
+\usepackage{mdframed}                       % Necessary for dark gray boxes.
+\usepackage{mathtools}                      % More compact math.
+\usepackage{amsthm}                         % Necessary for theorem boxes.
+\usepackage{amssymb}						% Necessary for mathbb symbols.
+\usepackage{multicol,multirow}              % Necessary for multi column format.
+\usepackage{subfiles}						% Necessary for multiple subfiles
+\usepackage{tabularx}						% Necessary for full-column tables 
+\usepackage{bm}								% Necessary for bold math with \pbm{...}
+\usepackage{xcolor}							% Necessary for custom colors. 
+\usepackage{graphicx}
+\usepackage{accents}						% Necessary for doublehat
+\usepackage{pgfplots}
+\usepackage{fancyhdr}						% Necessary for header/footer settings
+
+% Header / Footer settings
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\rhead{} 
+\lhead{} 
+\chead{} 
+\cfoot{ETH Zürich $\cdot$ D-INFK}
+\lfoot{Flavio Schneider}
+\rfoot{Page \thepage}
+
+% Horizontal line 
+\newcommand{\separator}{\noindent\makebox[\linewidth]{\rule{\columnwidth}{0.4pt}}}
+
+
+\iffalse 
+Still saw a typo right away. Expected value of the Cauchy distribution is undefined.
+
+\begin{pmatrix}n\k\end{pmatrix} =\begin{pmatrix}n-1\k\end{pmatrix} + \begin{pmatrix}n-1\k-1\end{pmatrix}\neq \begin{pmatrix}n\k\end{pmatrix} + \begin{pmatrix}n-1\k-1\end{pmatrix}
+and I think an important one is missing:
+\begin{pmatrix}n\k\end{pmatrix} =\begin{pmatrix}n\n-k\end{pmatrix}
+
+
+
+
+\fi 
+
+%\setlength{\columnseprule}{0.2pt}
+
+%---------------------------------------------------%
+% Environments
+%---------------------------------------------------%
+% Definition: \begin{boxdefinition}[Name] ... \end{boxdefinition}
+\mdtheorem [%
+		backgroundcolor	= black!15,
+		linewidth		= 0pt,
+		skipabove 		= 4pt,
+		skipbelow		= 4pt
+		]{boxdefinition}{Def.}[section]
+
+% Theorem: \begin{boxtheorem}[Name] ... \end{boxtheorem}
+\mdtheorem [
+		backgroundcolor	= black!15,
+		linewidth		= 0pt,
+		skipabove 		= 4pt,
+		skipbelow		= 4pt
+		]{boxtheorem}{Theorem}
+
+\mdtheorem [
+		backgroundcolor	= black!15,
+		linewidth		= 0pt,
+		skipabove 		= 4pt,
+		skipbelow		= 4pt,
+		innerbottommargin = 4pt
+		]{boxlemma}{Lemma}[section]
+
+\mdtheorem [
+		backgroundcolor	= black!15,
+		linewidth		= 0pt,
+		skipabove 		= 4pt,
+		skipbelow		= 4pt
+		]{boxcorollary}{Corollary}[section]
+
+\mdtheorem [
+	backgroundcolor	= black!15,
+	linewidth		= 0pt,
+	skipabove 		= 4pt,
+	skipbelow		= 4pt
+	]{boxaxiom}{Axiom}[section]
+
+\mdtheorem [
+	backgroundcolor	= black!05,
+	linewidth		= 0pt,
+	skipabove 		= 4pt,
+	skipbelow		= 4pt
+	]{boxguide}{Guide}[section]
+
+%---------------------------------------------------%
+% Commands (Shorctuts)
+%---------------------------------------------------%
+
+% NUMBER SETS 
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+
+% LISTS
+% Number List: \begin{listn} \item \end{listn}
+\newlist{listn}{enumerate}{1}
+\setlist[listn, 1]{label={\arabic*.}, itemsep=-0.2em, leftmargin=*,labelindent=0.5em}
+% Roman number list: \begin{listrn} \item \end{listrn}
+\newlist{listnr}{enumerate}{1}
+\setlist[listnr, 1]{label={(\roman*)},itemsep=-0.2em, leftmargin=*,labelindent=-0.5em}
+% Bullet List 
+\newlist{listb}{itemize}{1}
+\setlist[listb, 1]{itemsep=0em, leftmargin=1em, label={·}}
+
+% COLUMN SETTINGS 
+% Fill remaining space in column 
+\newcommand{\colfill}{\vfill\eject\columnbreak}	
+% Fill null 
+\newcommand{\colnull}{\vfill\null\columnbreak}	
+
+% SHORTCUTS 
+% Proof: \begin{proof} ... \end{proof}
+\renewcommand{\proofname}{\rm\textbf{\textit{Proof.}} }
+% Text over equality: \eqtxt{text}
+\newcommand{\eqtxt}[1]{\mathrel{\stackrel{\makebox[0pt]{\mbox{\normalfont\tiny #1}}}{=}}}
+% Def equality := : \eqdef 
+\newcommand{\eqdef}{\mathrel{\vcenter{\baselineskip0.5ex\lineskiplimit0pt\hbox{\scriptsize.}\hbox{\scriptsize.}}}=}
+% Mark variable x with y label: \markvar{x}{y}
+\newcommand{\markvar}[2]{\underset{\underset{#2}{\downarrow}}{#1}}		
+% Limits to infinity: \limseq{from}{equal}
+\newcommand{\limseq}[2]{\lim\limits_{#1 \rightarrow \infty}{#2}}	
+% Limits: \limcont{from}{to}{equal}
+\newcommand{\limcont}[3]{\lim\limits_{#1 \rightarrow #2}{#3}}		
+% Sequence a_n where n is natural: \seq{a}{n}
+\newcommand{\seq}[2]{(#1_#2)_{#2 \in \N}}					
+% Series from i=0 to infinity: \series{i}{body}
+\newcommand{\series}[1]{\sum_{#1 = 0}^\infty}		
+% Variance:
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Corr}{\mathrm{Corr}}
+
+\renewcommand{\vec}[1]{\mathbf{#1}}
+
+% Ceil delimiter: \ceil{body}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}							
+% Floor delimiter: \floor{body}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+% Argmax and argmin
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+% Norm ||x||: \norm{x}
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+% Tab space custom size: \tab[30pt]		
+\newcommand\tab[1][0.5em]{\hspace*{#1}}
+
+% Column types for tables 
+\newcolumntype{b}{>{\hsize=1.5\hsize}X}
+\newcolumntype{s}{>{\hsize=.5\hsize}X}
+\newcolumntype{t}{>{\hsize=1.25\hsize\centering\arraybackslash}X}
+
+% PFG Plots 
+\pgfmathdeclarefunction{gauss}{2}{\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+\pgfmathdeclarefunction{binomial}{2}{\pgfmathparse{((#1!)/(x!*(#1-x)!)*(#2)^x*(1-#2)^(#1-x)}}
+\pgfmathdeclarefunction{poisson}{1}{\pgfmathparse{exp(-#1)*(#1^x/x!)}}
+
+
+\newsavebox{\measuredSize}
+\newcommand{\resizeToWidth}[2]{%
+    \pgfmathsetmacro{\pgfplotswidth}{#2}%
+    \begin{lrbox}{\measuredSize}#1\end{lrbox}%
+    \pgfmathsetmacro{\pgfplotswidth}{2*\pgfplotswidth-\wd\measuredSize}%
+    #1%
+}
+
+
+\begin{document}
+\begin{titlepage}
+    \begin{center}
+		\vspace*{1cm} \Huge \textbf{Probability and Statistics}
+		\vspace{0.5cm} \Large \\  Cheat Sheet $\cdot$ v1.0.1
+		\vfill Flavio Schneider 
+		\vspace{0.5cm} \\ ETH Zürich - D-INFK        
+    \end{center}
+\end{titlepage}
+
+\begin{multicols}{4}
+\section{Probability} 
+\subsection{Basics}
+\begin{boxdefinition}[Sample Space] 
+	The sample space, denoted by $\Omega\neq\emptyset$, is the set of all possible outcomes of an experiment, it can be finite or infinite. 
+\end{boxdefinition}
+\begin{boxdefinition}[Event] 
+	An event $A$ is a subset of the sample space $A\subseteq\Omega$, or an element of the powerset of the sample space $A\in 2^{\Omega}$. 
+\end{boxdefinition}
+\begin{boxdefinition}[Observable Event Set] 
+	The set of all observable events is denoted by $\mathcal{F}$, where $\mathcal{F}\subseteq 2^{\Omega}$. 
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item Usually if $\Omega$ is countable $\mathcal{F}=2^\Omega$, however sometimes many events are excluded from $\mathcal{F}$ since it's not possible for them to happen.
+\end{listb}
+\begin{boxdefinition}[$\sigma-$Algebra] 
+	The set $\mathcal{F}$ is called a $\sigma-$Algebra if:
+	\begin{listnr}
+		\item $\Omega\in\mathcal{F}$
+		\item $\forall A\subseteq\Omega: A\in\mathcal{F} \Rightarrow A^C\in\mathcal{F}$
+		\item $\forall (A_n)_{n\in\N}: A_n\in\mathcal{F} \Rightarrow \bigcup_{n=1}^\infty A_n\in\mathcal{F}$
+	\end{listnr}
+\end{boxdefinition}
+
+\begin{boxdefinition}[Probability Function]
+	$P:\mathcal{F}\rightarrow[0,1]$ is a probability function if it satisfies the following 3 axioms:
+	\begin{listnr}
+		\item $\forall A\in\mathcal{F}: P\left[A\right]\geq 0$ 
+		\item $P[\Omega] = 1$
+		\item $P[\bigcup_{n=1}^\infty A_n] = \sum_{n=1}^{\infty} P\left[A_n\right]$
+	\end{listnr}
+	where $A_n$ are disjunct. 
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Properties} (derived from the 3 axioms):
+	\item $P\left[A^C\right] = 1-P\left[A\right]$
+	\item $P\left[\emptyset\right]=0$ 
+	\item $A\subseteq B\Rightarrow P[A]\leq P[B]$ 
+	\item $P[A\cup B] = P[A] + P[B] - P[A\cap B]$ 
+\end{listb}
+\begin{boxtheorem}[Inclusion-Exclusion] 
+	Let $A_1,\dots,A_n$ be a set of events, then: 
+	\[
+		P\left[\bigcup_{i=1}^{n} A_i\right] = \sum_{k=1}^{n} (-1)^{k-1}S_k
+	\]
+	where 
+	\[
+		S_k = \sum_{ \substack{ I\subseteq \{1,\dots,n\} \\ \left\lvert I\right\rvert = k}} P\left[\bigcap_{i\in I} A_i\right] 
+	\]
+\end{boxtheorem}
+
+\subsection{Discrete Probability}
+We talk about discrete probability if $\Omega$ is countable (finite or infinite). 
+\begin{boxdefinition}[Laplace Space] 
+	If $\Omega=\left\{\omega_1,\dots,\omega_N\right\}$ with $\left\lvert\Omega\right\rvert = N$ where all $\omega_i$ have the same probability $p_i=\frac{1}{N}$, $\Omega$ is called Laplace Space and $P$ has a discrete unifrom distribution. For some event $A$ we have: 
+	\[
+		P[A] = \frac{\left\lvert A\right\rvert }{\left\lvert \Omega\right\rvert } 
+	\]
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item The discrete uniform distribution exists only if $\Omega$ is finite. 
+\end{listb}
+\subsection{Conditional Probability}
+\begin{boxdefinition}[Conditional Probability] 
+	Given two events $A$ and $B$ with $P[A]>0$, the probability of $B$ given $A$ is defined as:
+	\[
+		P\left[B|A\right] \eqdef \frac{P\left[B\cap A\right]}{P[A]}
+	\] 
+\end{boxdefinition}
+\begin{boxtheorem}[Total Probability] 
+	Let $A_1,\dots,A_n$ be a set of disjunct events $\forall i\neq j: A_i\cap A_j=\emptyset$ where $\bigcup_{i=1}^n A_i=\Omega$, then for any event $B\subseteq\Omega$:
+	\[
+		P\left[B\right] = \sum_{i=1}^{n} P\left[B|A_i\right]P\left[A_i\right]
+	\]
+\end{boxtheorem} 
+\begin{boxtheorem}[Bayes' Rule] 
+	Let $A_1,\dots,A_n$ be a set of disjunct events $\forall i\neq j: A_i\cap A_j=\emptyset$ where $\bigcup_{i=1}^n A_i=\Omega$, with $P[A_i]>0$ for all $i=1,\dots,n$, then for an event $B\subseteq\Omega$ with $P[B]>0$ we have: 
+	\[
+		P\left[A_k|B\right] = \frac{P[B|A_k]P[A_k]}{\sum_{i=1}^{n} P\left[B|A_i\right]P\left[A_i\right]}
+	\]
+\end{boxtheorem}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item If we have only two events $A$ and $B$ it simplifies to: $P[A|B] = \frac{P[B|A]P[A]}{P[B]}$
+\end{listb}
+\subsection{Independence}
+\begin{boxdefinition}[Independence]	 
+	A set of events $A_1,\dots,A_n$ are independent if for all $m\in\N$ with $\left\{k_1,\dots,k_m\right\}\subseteq{1,\dots,n}$ we have:
+	\[
+		P\left[\bigcap_{i=1}^m A_{k_i}\right] = \prod_{i=1}^m P[A_{k_i}]
+	\]
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item [] With only two events: 
+	\item $A$ and $B$ are independent iff $P[A\cap B] = P[A]P[B]$
+	\item $A$ and $B$ are independent iff $P[B|A] = P[B]$
+\end{listb}
+% TODO: add total probability, independence and bayes visualization with trees.  
+\colnull
+\section{Combinatorics}
+Let $n$ be the number of total objects and $k$ be the number of object that we want to select ($k=n$ if we consider all objects), then:\\
+\begin{boxdefinition}[Permutation]
+	A \textit{permutation} $P_n(k)$ is an arrangement of elements where we care about ordering.
+	\begin{listnr}
+		\item Repetition not allowed:
+		\[
+			P_n(k)=\frac{n!}{(n-k)!}
+		\]
+		\item Repetition allowed:
+		\[
+			P_n(k)=n^k 
+		\]
+	\end{listnr}
+\end{boxdefinition}
+
+\begin{boxdefinition}[Combination] 
+	A \textit{combination} $C_n(k)$ is an arrangement of elements where we do \textit{not} care about ordering.
+	\begin{listnr}
+		\item Repetition not allowed:
+		\[
+			C_n(k)={n \choose k}=\frac{P_n(k)}{k!}=\frac{n!}{k!(n-k)!}
+		\]
+		\item Repetition allowed:
+		\[
+			C_n(k)={n+k-1 \choose k}
+		\]
+	\end{listnr}
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item Repetition is the same as replacement, since by replacing an object in the set we'll be able to use it again.
+	\item [] \textbf{Properties}
+	\item $0! = 1$ 
+	\item ${n \choose k}=\frac{n!}{k!(n-k)!}$
+	\item ${n \choose 0} = {n \choose n} = 1$
+	\item ${n \choose 1} = {n \choose n-1} = n$
+	\item ${n \choose k} = {n \choose n-k}$
+	\item ${n \choose k} = {n-1 \choose k-1}+{n-1 \choose k}$ 
+	\item $\sum_{k=0}^{n}{n \choose k} = 2^n$ 
+\end{listb}
+
+\colfill
+
+\section{Random Variables}
+\subsection{Basics}
+
+\begin{boxdefinition}[Random Variable] 
+	Let $(\Omega, \mathcal{F}, P)$ be a probability space, then a \textit{random variable} (RV) on $\Omega$ is a function: 
+	\[
+		X:\Omega\rightarrow \mathcal{W}(X)\subseteq\R
+	\]
+	if the image $\mathcal{W}(X)$ is countable $X$ is called a \textit{discrete} random variable, otherwise it's called a \textit{continuous} random variable. 
+\end{boxdefinition}
+
+\begin{boxdefinition}[Probability Density] 
+	The \textit{probability density function} (PDF) $f_X:\R\rightarrow\R$ of a RV $X$, is function defined as: 
+	\[
+		f_X(x) \eqdef P[X = x] \eqdef P\left[\{\omega \mid X(\omega) = x\}\right]
+	\]
+	with $X$ discrete we use $p_X(t)$ instead of $f_X(t)$.
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item $f_X=0$ and $f_X\geq 0$ outside of $W(X)$.
+	\item $\int_{-\infty}^{\infty}f_X(t)dt = 1$
+\end{listb}
+\begin{boxdefinition}[Cumulative Distribution] 
+	The \textit{cumulative distribution function} (CDF) $F_X:\R\rightarrow[0,1]$ of a RV $X$, is a function defined as: 
+	\[
+		F_X(x) \eqdef P[X \leq x] \eqdef P\left[\{\omega \mid X(\omega) \leq x\}\right]
+	\]
+	if the PDF is given it can be expressed with:
+	\[
+		F_X(x) =
+		\begin{cases}
+			\displaystyle \sum_{x_i\leq x} p_X(x_i) & \ \textit{$X$ discr.}\\[2em]
+			\displaystyle \int_{-\infty}^{x} f_X(t)dt & \ \textit{$X$ cont.}
+		\end{cases}
+	\]
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item \textit{Monotone:} If $t\leq s$ then $F_X(t)\leq F_X(s)$. 
+	\item \textit{R-continuous:} If $t>s$ then $\limcont{t}{s}{F_X(t)}=F_X(s)$.
+	\item \textit{Limits:} $\limcont{t}{-\infty}{F_X(t)}=0 \land \limcont{t}{\infty}{F_X(t)}=1$. 
+	\item $P\left[a<X\leq b\right] = F_X(b)-F_X(a) = \int_{a}^{b}f_X(t)dt$ 
+	\item $P\left[X > t\right] = 1-P\left[X \leq t\right] = 1 - F_X(t)$
+	\item $\frac{d}{dx}F_X(x) = f_X(x)$
+\end{listb}
+
+\subsection{Expected Value}
+\begin{boxdefinition}[Expected Value] 
+	Let $X$ be a RV, then the \textit{expected value} is defined as: 
+	\[
+		\mathbb{E}\left[X\right] = \mu \eqdef 
+		\begin{cases}
+			\displaystyle \sum_{x_k\in\mathcal{W}(X)} x_k \cdot p_X(x_k) & \ \textit{$X$ discr.} \\[2em]
+			\displaystyle \int_{-\infty}^{\infty} x\cdot f_X(x)dx & \ \textit{$X$ cont.}
+		\end{cases}
+	\]
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item $\mathbb{E}\left[X\right] \leq \mathbb{E}\left[Y\right]$ if $\forall \omega : X(\omega) \leq Y(\omega)$
+	\item $\mathbb{E}\left[\sum_{i=0}^{n}a_iX_i\right] = \sum_{i=0}^{n}a_i\mathbb{E}\left[X_i\right]$
+	\item $\mathbb{E}\left[X\right] = \sum_{j=1}^{\infty} P\left[X\geq j\right]$, if $W(X)\subseteq \N_0$. 
+	\item $\mathbb{E}\left[\sum_{i=0}^{\infty} X_i\right] \neq \sum_{i=0}^{\infty} \mathbb{E}\left[X_i\right]$
+	\item $\mathbb{E}\left[\mathbb{E}\left[X\right]\right] = \mathbb{E}\left[X\right]$
+	\item $\mathbb{E}\left[XY\right]^2 \leq \mathbb{E}\left[X^2\right]\mathbb{E}\left[Y^2\right]$
+	\item $\displaystyle\mathbb{E}\left[\prod_{i=0}^{n}X_i\right] = \prod_{i=0}^{n}\mathbb{E}\left[x_i\right]$ for indep. $X_1,\dots,X_n$.
+\end{listb}
+
+\begin{boxtheorem}[$\mathbb{E}$ of Functions] 
+	Let $X$ be a RV and $Y=g(X)$, with $g:\R\rightarrow\R$, then:
+	\[
+		\mathbb{E}\left[Y\right] = 
+		\begin{cases}
+			\displaystyle \sum_{x_k\in\mathcal{W}(X)} g(x_k)\cdot p_X(x_k) & \ \textit{$X$ discr.} \\[2em]
+			\displaystyle \int_{-\infty}^{\infty} g(x)\cdot f_X(x)dx & \ \textit{$X$ cont.}
+		\end{cases}
+	\]
+\end{boxtheorem}
+
+\begin{boxdefinition}[Moment-Generating Function] 
+	Let $X$ be a RV, then the \textit{moment-generating function} of $X$ is defined as: 
+	\[
+		M_X(t)\eqdef \mathbb{E}\left[e^{tX}\right] 
+	\]
+\end{boxdefinition}
+
+
+\colnull
+\subsection{Variance}
+\begin{boxdefinition}[Variance] 
+	Let $X$ be a RV with $\mathbb{E}\left[X^2\right]<\infty$, then the \textit{variance} of X is defined as:
+	\[
+		\Var\left[X\right] \eqdef \mathbb{E}\left[(X-\mathbb{E}\left[X\right])^2\right] 
+	\]
+	with the extended form:
+	\[
+		\Var\left[X\right] = 
+		\begin{cases}
+			\displaystyle \left(\sum_{k} p_X(x_k)\cdot x_k^2\right) - \mu^2 & \textit{$X$ discr.} \\[2em]
+			\displaystyle \int_{-\infty}^{\infty} x^2\cdot f_X(x)dx - \mu^2& \textit{$X$ cont.}
+		\end{cases}
+	\]
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item $0 \leq \Var\left[X\right] \leq \mathbb{E}\left[X^2\right]$
+	\item $\Var\left[X\right] = \mathbb{E}\left[X^2\right]-\mathbb{E}\left[X\right]^2$ 
+	\item $\Var\left[aX+b\right] = a^2\Var\left[X\right]$
+	\item $\Var\left[X\right] = \Cov(X,X)$ 
+	\item $\displaystyle\Var\left[\sum_{i=0}^{n}a_iX_i\right] = \\ \sum_{i=0}^{n}a_i^2\Var\left[X_i\right]+2\sum_{1\leq i < j \leq n} a_ia_j\Cov(X_i, X_j)$
+	\item $\displaystyle\Var\left[\sum_{i=0}^{n}a_iX_i\right] = \sum_{i=0}^{n}\Var\left[X_i\right]$ \\if $\forall(i\neq j) : \Cov(X_i,X_j) = 0$.
+\end{listb}
+\begin{boxdefinition}[Standard Deviation] 
+	Let $X$ be a RV with $\mathbb{E}\left[X^2\right]<\infty$, then the \textit{standard deviation} of X is defined as:
+	\[
+		\sigma(X) = sd(X) \eqdef \sqrt{\Var\left[X\right]}	
+	\]
+\end{boxdefinition}
+\colnull 
+\subsection{Other Functions}
+
+\begin{boxdefinition}[Covariance]
+	Let $X,Y$ be RVs with finite expected value, then the \textit{covariance} of $X$ and $Y$ is defined as: 
+	\[
+		\begin{split}
+			\Cov\left(X,Y\right) &\eqdef \mathbb{E}\left[(X-\mathbb{E}\left[X\right])(Y-\mathbb{E}\left[Y\right])\right] \\ 
+			&= \mathbb{E}\left[XY\right]-\mathbb{E}\left[X\right]\mathbb{E}\left[Y\right]
+		\end{split}
+	\]
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item The covariance is a measure of correlation between two random variables, $\Cov\left(X,Y\right)>0$ if $Y$ tends to increase as $X$ increases and $\Cov\left(X,Y\right)<0$ if $Y$ tends to decrease as $X$ increases. If $\Cov\left(X,Y\right)=0$ then $X$ and $Y$ are uncorrelated. 
+	\item [] \textbf{Properties}
+	\item $\Cov(aX,bY)=ab\Cov(X,Y)$
+	\item $\Cov(X+a,Y+b)=\Cov(X,Y)$ 
+	\item $\Cov(a_1X_1+a_2X_2, b_1Y_1+b_2Y_2) = \\ a_1b_1\Cov(X_1,Y_1)+a_1b_2\Cov(X_1,Y_2)+ \\ a_2b_1\Cov(X_2,Y_1)+a_2b_2\Cov(X_2,Y_2)$
+\end{listb}
+
+\begin{boxdefinition}[Correlation] 
+	Let $X,Y$ be RVs with finite expected value, then the \textit{correlation} of $X$ and $Y$ is defined as: 
+	\[
+		\Corr(X,Y) = \frac{\Cov\left(X,Y\right)}{\sqrt{\Var\left[X\right]\cdot\Var\left[Y\right]}}
+	\]
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item Correlation is the same as covariance but normalized with values between $-1$ and $1$.
+	\item $X,Y$ indep. $\Rightarrow$ $\Corr(X,Y)=\Cov(X,Y)=0$. 
+\end{listb}
+
+
+\begin{boxdefinition}[Indicator Function] 
+	The \textit{indicator function} $I_A$ for a set (event) $A$ is defined as: 
+	\[
+		I_A(\omega) \eqdef 
+		\begin{cases}
+			1 & w\in A \\ 
+			0 & w\in A^C
+		\end{cases}
+	\]
+\end{boxdefinition}
+
+\colfill
+
+\subsection{Joint Probability}
+\begin{boxdefinition}[Joint PDF] 
+	The \textit{joint probability density function} $f_{\vec{X}}:\R^n\rightarrow[0,1]$ with $\vec{X} = (X_1,\dots,X_n)$ is a function defined as: 
+	\[
+		f_{\vec{X}}(x_1,\dots,x_n) \eqdef P[X_1 = x_1,\dots,X_n = x_n]
+	\]
+	with $\vec{X}$ discrete we use $p_{\vec{X}}(\vec{x})$ instead of $f_{\vec{X}}(\vec{x})$.
+\end{boxdefinition}
+\begin{boxdefinition}[Joint CDF] 
+	The \textit{joint cumulative distribution function} $F_{\vec{X}}:\R^n\rightarrow[0,1]$ with $\vec{X} = (X_1,\dots,X_n)$ is a function defined as: 
+	\[
+		F_{\vec{X}}(x_1,\dots,x_n) \eqdef P[X_1\leq x_1,\dots,X_n \leq x_n]
+	\]
+	if the joint PDF is given it can be expressed with:
+	\[
+		F_{\vec{X}}(\vec{x}) =
+		\begin{cases}
+			\displaystyle \sum_{t_1\leq x_1}\dots\sum_{t_n\leq x_n} p_{\vec{X}}(\vec{t})  & \ \textit{discr.}\\[2em]
+			\displaystyle \int_{-\infty}^{x_1}\dots\int_{-\infty}^{x_n} f_{\vec{X}}(\vec{t})d\vec{t} & \ \textit{cont.}
+		\end{cases}
+	\]
+	where $\vec{t}=(t_1,\dots,t_n)$ and $\vec{x}=(x_1,\dots,x_n)$.
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item $\displaystyle\frac{\partial^n F_\vec{X}(x_1,\dots,x_n)}{\partial x_1,\dots,\partial x_n} = f_{\vec{X}}(x_1,\dots,x_n)$
+\end{listb}
+\begin{boxdefinition}[Marginal PDF] 
+	The \textit{marginal probability density function} $f_{X_i}:\R\rightarrow[0,1]$ of $X_i$ given a joint PDF $f_{\vec{X}}(x_1,\dots,x_n)$, is defined as:
+	\[
+		f_{X_i}(t_i) =
+		\begin{cases}
+			\displaystyle \sum_{t_1}\dots\sum_{t_{i-1}}\sum_{t_{i+1}}\dots\sum_{t_n} p_{\vec{X}}(\vec{t})  &\textit{discr.}\\[2em]
+			\displaystyle \int_{-\infty}^{\infty}\dots\int_{-\infty}^{\infty} f_{\vec{X}}(\vec{t})d\vec{\tilde t} &\textit{cont.}
+		\end{cases}
+	\]
+	where $\vec{\tilde t}=(t_1,\dots,t_{i-1},t_{i+1},\dots,t_n)$, and in the discrete case $t_k\in\mathcal{W}(X_k)$. 
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item The idea of the marginal probability is to ignore all other random variables and consider only the one we're interested to. 
+\end{listb}
+\begin{boxdefinition}[Marginal CDF] 
+	The \textit{marginal cumulative distribution function} $F_{X_i}:\R\rightarrow[0,1]$ of $X_i$ given a joint CDF $F_{\vec{X}}(x_1,\dots,x_n)$, is defined as:
+	\[
+		F_{X_i}(x_i) = \limcont{x_{j\neq i}}{\infty}{F_{\vec{X}}(x_1,\dots,x_n)}
+	\]
+\end{boxdefinition}
+\begin{boxdefinition}[Conditional Distribution] 
+	The \textit{conditional distribution} $f_{X|Y}:\R\rightarrow[0,1]$ is defined as:
+	\[
+		\begin{split}
+			f_{X|Y}(x|y) 
+			&\eqdef P\left[X=x|Y=y\right] \\ 
+			&= \frac{P\left[X=x,Y=y\right]}{P\left[Y=y\right]}\\
+			&= \frac{\textit{Joint PDF}}{\textit{Marginal PDF}}\\
+		\end{split}
+	\]
+	with $X$ and $Y$ discrete we write $p_{X|Y}(x|y)$ instead of $f_{X|Y}(x|y)$.
+\end{boxdefinition}
+\subsection{Independence}
+\begin{boxdefinition}[Independence] 
+	The RVs $X_1,\dots,X_n$ are independent if:
+	\[
+		F_{X_1,\dots,X_n}(x_1,\dots,x_n) = \prod_{i=1}^{n} F_{X_i}(x_i)
+	\]
+	similarly if their PDF is absolutely continuous they are independent if:
+	\[
+		f_{X_1,\dots,X_n}(x_1,\dots,x_n) = \prod_{i=1}^{n} f_{X_i}(x_i)
+	\]
+\end{boxdefinition}
+\begin{boxtheorem}[Function Independence] 
+	If the RVs $X_1,\dots,X_n$ are independent where $f_i:\R\rightarrow\R$ is a function with $Y_i\eqdef f_i(X_i)$ then also $Y_1,\dots,Y_n$ are independent. 
+\end{boxtheorem}
+\begin{boxtheorem} 
+	The RVs $X_1,\dots,X_n$ are independent iff $\forall B_i \subseteq W(X_i)$:
+	\[
+		P\left[X_1\in B_1,\dots,X_n\in B_n\right] = \prod_{i=1}^{n} P\left[X_i\in B_i\right]
+	\]
+\end{boxtheorem}
+\colnull 
+\subsection{Joint Functions}
+\begin{boxdefinition}[Joint Expected Value] 
+	The \textit{joint expected value} of a RV $Y=g(X_1,\dots,X_n)=g(\vec{X})$ is defined as:
+	\[
+		\mathbb{E}\left[Y\right]=
+		\begin{cases}
+			\displaystyle \sum_{t_1}\dots\sum_{t_n} g(\vec{t})p_{\vec{X}}(\vec{t})  &\textit{discr.}\\[2em]
+			\displaystyle \int_{-\infty}^{\infty}\dots\int_{-\infty}^{\infty} g(\vec{t})f_{\vec{X}}(\vec{t})d\vec{t} &\textit{cont.}
+		\end{cases}
+	\]
+	where $\vec{t}=(t_1,\dots,t_n)$, and in the discrete case $t_k\in\mathcal{W}(X_k)$. 
+\end{boxdefinition}
+\begin{boxdefinition}[Conditional Expected Value] 
+	The \textit{conditional expected value} of RVs $X,Y$ is:
+	\[
+		\mathbb{E}\left[X|Y\right](y)= 
+		\begin{cases}
+			\displaystyle  \sum_{x\in\R} x\cdot p_{X|Y}(x|y)&\textit{discr.}\\[2em]
+			\displaystyle \int_{-\infty}^{\infty} x\cdot f_{X|Y}(x|y)dx &\textit{cont.}
+		\end{cases}
+	\]
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item $\mathbb{E}\left[\mathbb{E}\left[X|Y\right]\right] = \mathbb{E}\left[X\right]$
+	\item $\mathbb{E}\left[X|Y\right](y)=\mathbb{E}\left[X\right]$ if $X,Y$ indep. 
+\end{listb}
+
+\begin{boxdefinition}
+	Let $Y=g(X_1,\dots,X_n)=g(\vec{X})$, then:
+	\[
+		P\left[Y\in C\right]=\int_{A_C} f_\vec{X}(\vec{t})d\vec{t} 
+	\]
+	where $A_C=\left\{ \vec{x}=(x_1,\dots,x_n)\in\R^n \mid g(\vec{x})\in C\right\}$ and $\vec{t}=(t_1,\dots,t_n)$. 
+\end{boxdefinition} 
+
+\begin{boxtheorem}[Transformation] 
+	Let $F$ be continuous and a strictly increasing CDF and let $X\sim\mathcal{U}(0,1)$, then:
+	\[
+		Y=F^{-1}(X) \Rightarrow F_Y = F 
+	\]
+\end{boxtheorem}
+\colnull
+
+\subsection{Evaluation}
+\begin{boxguide}[Monte Carlo Integration] 
+	Let $I=\int_{a}^{b}g(x)dx$ be the integral of a function that is hard to evaluate, then:
+	\[
+		\begin{split}
+			I &=\int_{a}^{b}g(x)dx \\ 
+			&= (b-a)\int_{a}^{b}g(x)\frac{1}{b-a}dx \\ 
+			&= (b-a)\int_{-\infty}^{\infty}g(x)f_\mathcal{U}(x)dx \\ 
+			&= (b-a)\cdot\mathbb{E}\left[g(\mathcal{U})\right] \\ 
+		\end{split}
+	\]
+	where $\mathcal{U}(a,b)$ is uniformely distributed. Then by the LLN know that we can approximate $\mathbb{E}\left[g(\mathcal{U})\right]$ by randomly sampling $u_1,u_2,\dots$ from $\mathcal{U}(a,b)$. 
+	\[
+		\frac{b-a}{n}\sum_{i=1}^{n} g(u_i)\xrightarrow[n\rightarrow\infty]{} (b-a)\cdot\mathbb{E}\left[g(\mathcal{U})\right]
+	\]
+\end{boxguide}
+\begin{boxguide}[Transformation] 
+	If we have a RV $X$ with known CDF (strictly increasing) with $Y=g(X)$, to evaluate $F_Y$ and $f_Y$ we proceed as follows: 
+	\begin{listnr}
+		\item $F_Y(t)=P[g(X)\leq t]=\int_{A_g}f_X(s)ds$ 
+		\item $f_Y(t)=\frac{dF_Y(t)}{dt}$
+	\end{listnr}
+	where $A_g=\left\{s\in\R \mid g(s)\leq t\right\}$
+\end{boxguide}
+\begin{boxguide}[Sum Convolution] 
+	Let $X_1,\dots,X_n$ be independent RVs then the sum $Z=X_1+\cdots+X_n$ has a PDF $f_Z(z)$ evaluated with a convolution between all PDFs:
+	\[
+		f_Z(z) = (f_{X_1}(x_1)\ast\cdots\ast f_{X_n}(x_n))(z)
+	\]
+	in the special case that $Z=X+Y$: 
+	\[
+		f_Z(z)=
+		\begin{cases}
+			\displaystyle \sum_{x_k\in\mathcal{W}(X)}p_X(x_k)p_Y(z-x_k)  & \textit{discr.} \\[2em]
+			\displaystyle \int_{-\infty}^{\infty} f_{X}(t)f_{Y}(z-t) dt & \textit{cont.}
+		\end{cases}
+	\]
+\end{boxguide}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item Often is much easier to use properties of the RVs to find the sum instead of evaluating the convolution. 
+\end{listb}
+\colfill
+
+\begin{boxguide}[Product] 
+	Let $X,Y$ be independent RVs then to evaluate the PDF and CDF of $Z=XY$ we proceed as follows: 
+	\[
+		\begin{split}
+			F_Z(z)&=P\left[XY\leq z\right] \\
+			&= \textstyle P\left[X\geq \frac{z}{Y}, Y<0\right] + P\left[X\leq \frac{z}{Y}, Y>0\right] \\
+			&=\int_{-\infty}^{0}\left[\int_{\frac{z}{y}}^{\infty} f_X(x)dx\right] f_Y(y)dy\\ 
+			&+\int_{0}^{\infty}\left[\int_{-\infty}^{\frac{z}{y}} f_X(x)dx\right] f_Y(y)dy 
+		\end{split}
+	\]
+	where the PDF is:
+	\[
+		f_Z(z)=\frac{d}{dz}F_Z(z)=\int_{-\infty}^{\infty}f_Y(y)f_X\left(\frac{z}{y}\right)\frac{1}{\left\lvert y\right\rvert}dy
+	\]
+\end{boxguide}
+\begin{boxguide}[Quotient] 
+	Let $X,Y$ be independent RVs then to evaluate the PDF and CDF of $Z=\frac{X}{Y}$ we proceed as follows: 
+	\[
+		\begin{split}
+			F_Z(z)&=P\left[\frac{X}{Y}\leq z\right] \\
+			&= P\left[X\geq zY, Y<0\right] + P\left[X\leq zY, Y>0\right] \\
+			&= \int_{-\infty}^{0}\left[\int_{yz}^{\infty}f_X(x)dx\right]f_Y(y)dy \\ &+ \int_{0}^{\infty}\left[\int_{-\infty}^{yz}f_X(x)dx\right]f_Y(y)dy \\
+		\end{split}
+	\]
+	where the PDF is: 
+	\[
+		f_Z(z)=\frac{d}{dz}F_Z(z)=\int_{-\infty}^{\infty}\left\lvert y\right\rvert f_X(yz)f_Y(y)dy 
+	\]
+\end{boxguide}
+\colnull 
+\subsection{Sum and Average}
+Let $X_1,\dots,X_n$ be i.i.d RVs with finite mean $\mu$, standard deviation $\sigma$, and let $Z_n$ be the \textit{standardization} of a RV Y defined as:
+\\[1em]
+{\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\hsize}{s|t|t}
+	\hline
+	\rule{0pt}{1.3em}
+	 & \textit{Sum} & \textit{Average} \\[0.3em]
+	$Y$ & $\displaystyle S_n=\sum_{i=1}^{n}X_i$ & $\displaystyle\overline{X}_n=\frac{1}{n}\sum_{i=1}^{n}X_i$\\[1.5em]
+	\hline
+	\rule{0pt}{1.5em}
+	$\mathbb{E}[Y]$ & $n\mu$ & $\mu$\\[0.5em]
+	$\Var\left[Y\right]$ & $n\sigma^2$ & $\displaystyle\frac{\sigma^2}{n}$\\[1em]
+	$\sigma(Y)$ & $\displaystyle\sqrt{n}\sigma$ & $\displaystyle\frac{\sigma}{\sqrt{n}}$\\[1em]
+	$Z_n$	& $\displaystyle\frac{S_n-n\mu}{\sigma\sqrt{n}}$ & $\displaystyle\frac{\overline{X}_n-\mu}{\sigma/\sqrt{n}}$\\[1em]  
+	\hline
+\end{tabularx}} 
+\noindent
+\subsection{Convergence}
+\begin{boxdefinition}[Probability Convergence] 
+	Let $X_1,X_2,\dots$ and $Y$ be RV on the same probability space, then:
+	\begin{listnr}
+		\item $X_1,X_2,\dots$ converges to $Y$ in prob. if: \\[0.8em] 
+		$\displaystyle \forall \epsilon>0 \ \limcont{n}{\infty}{P\left[\left\lvert X-Y\right\rvert >\epsilon\right]}=0$
+		\item $X_1,X_2,\dots$ converges to $Y$ in $L^p$ for $p>0$ if:\\[0.8em] 
+		$\displaystyle \limcont{n}{\infty}{\mathbb{E}\left[\left\lvert X_n- Y\right\rvert^p\right]}=0$
+		\item $X_1,X_2,\dots$ converges to $Y$, P-almost surely if:\\[0.8em] 
+		$\displaystyle P\left[\limcont{n}{\infty}{X_n}= Y\right]=\\P\left[\left\{w\in\Omega \mid \limcont{n}{\infty}{X_n(\omega)}=Y(\omega)\right\}\right]=1$ 
+	\end{listnr}
+\end{boxdefinition}
+\begin{boxdefinition}[Distribution Convergence] 
+	Let $X_1,X_2,\dots$ and $Y$ be RV, with CDF $F_{X_1}, F_{X_2},\dots$ and $F_Y$ then $X_1,X_2,\dots$ converges to $Y$ in distribution if: 
+	\[
+		\forall x\in\R \ \limcont{n}{\infty}{F_{X_n}}(x)=F_Y(x)
+	\]
+\end{boxdefinition}
+\colnull 
+\subsection{Inequalities}
+\begin{boxtheorem}[Markov-Inequality] 
+	Let $X$ be a RV and $g:\mathcal{W}(X)\rightarrow[0,\infty)$ be an increasing function, then for all $c$ with $g(c)>0$ we have:
+	\[
+		P\left[X\geq c\right] \leq \frac{\mathbb{E}\left[g(X)\right]}{g(c)}	
+	\]
+	\textit{Note:} for practical uses usually $g(x)=x$. 
+\end{boxtheorem}
+\begin{boxtheorem}[Chebyshev-Inequality] 
+	Let $X$ a RV with $\Var\left[X\right]<\infty$ then if $b>0$:
+	\[
+		P\left[\left\lvert X-\mathbb{E}\left[X\right]\right\rvert \geq b \right] \leq \frac{\Var\left[X\right]}{b^2}
+	\]	
+\end{boxtheorem}
+\begin{boxtheorem}
+	Let $X_1,\dots,X_n \ i.i.d.$ where $\forall t:M_X(t)<\infty$ then for any $b\in\R$:
+	\[
+		P\left[S_n\geq b\right] \leq \exp\left(\inf_{t\in\R}(n\log M_X(t)-tb)\right)
+	\]
+\end{boxtheorem}
+\begin{boxtheorem}[Chernoff-Inequality] 
+	Let $X_1,\dots,X_n$, with $X_i \ i.i.d \sim \mathrm{Be}(p_i)$ and $S_n=\sum_{i=1}^{n}$ where $\mu_n\eqdef\mathbb{E}\left[S_n\right]=\sum_{i=1}^{n}p_i$ then if $\delta>0$:
+	\[ 
+		\begin{split}
+			P\left[S_n\geq (1+\delta)\mu_n\right] &\leq \left(\frac{e^\delta}{(1+\delta)^{1+\delta}}\right)^{\mu_n} \\ &\approx\mathcal{O}(e^{-n})
+		\end{split}
+	\]
+\end{boxtheorem}
+\colnull 
+\subsection{Limit Theorems}
+\begin{boxtheorem}[Law of Large Numbers] 
+	Let $X_1,X_2,\dots$ be i.i.d RVs with finite mean $\mu$. Let $\overline{X}_n$ be the average of the first $n$ variables, then the \textit{law of large numbers} (LLN) says that (different versions): 
+	\begin{listnr}
+		\item \textit{Weak }\\ \\ 
+		$\displaystyle\overline{X}_n=\frac{1}{n}\sum_{i=1}^{n}\xrightarrow[n\rightarrow\infty]{} \mu$
+		\item \textit{Weak }\\ \\
+		$\displaystyle \forall \epsilon \ P\left[\left\lvert \overline{X}_n-\mu\right\rvert>\epsilon \right] \xrightarrow[n\rightarrow\infty]{} 0$
+		\item \textit{Weak }\\ \\ 
+		$\displaystyle \forall \epsilon \ P\left[\left\lvert \overline{X}_n -\mu\right\rvert < \epsilon\right] \xrightarrow[n\rightarrow\infty]{} 1$
+		\item \textit{Strong }\\ \\ 
+		$\displaystyle P\left[\left\{\omega\in\Omega \ \vert \ \overline{X}_n(\omega)\xrightarrow[n\rightarrow\infty]{} \mu \right\}\right]$
+		\end{listnr}
+\end{boxtheorem}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item The law of large numbers says that if we average $n$ i.i.d. RV, then the more $n$ increases the more the average is probable to be close to the expected value of the RVs: $\overline{X}_n\approx\mu$. 
+	\item [] \textbf{Properties}
+	\item $\limcont{n}{\infty}{\frac{1}{n}\sum_{i=1}^{n}f(X_i)}=\mathbb{E}\left[f(X)\right]$ 
+\end{listb}
+\begin{boxtheorem}[Central Limit Theorem] 
+	Let $X_1,\dots,X_n$ be i.i.d RVs with finite mean $\mu$ and standard deviation $\sigma$. Let $Z_n$ be a standardization, then for any $z\in\R$:
+	\[
+		\limcont{n}{\infty}F_{Z_n}(z) = \limcont{n}{\infty}P\left[Z_n \leq  z\right] = \Phi(z)
+	\]
+	Where a practical application is that for $n$ big:
+	\begin{listnr}
+		\item $P\left[Z_n\leq z\right]\approx \Phi(z)$
+		\item $Z_n \approx \mathcal{N}(0,1)$
+		\item $S_n \approx \mathcal{N}\left(n\mu, n\sigma^2\right)$ 
+		\item $\overline{X}_n \approx \mathcal{N}\left(\mu, \frac{\sigma^2}{n}\right)$ 
+	\end{listnr} 
+\end{boxtheorem}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item The idea is that any (normalized) sum or average of RVs approaches a (standard) normal distribution as $n$ gets bigger. 
+\end{listb}
+
+\colfill 
+
+\section{Estimators}
+\subsection{Basics}
+\noindent 
+Let $X_1,\dots,X_n$ i.i.d. RVs, drawn according to some distribution $P_\theta$ parametrized by $\theta=(\theta_1,\dots,\theta_m)\in\Theta$ where $\Theta$ is the set of all possible parameters for the selected distribution. Then the goal is to find the best estimator $\hat{\theta}\in\Theta$ such that $\hat{\theta}\approx\theta$ since the real $\theta$ cannot be known exactly from a finite sample. 
+\\
+\begin{boxdefinition}[Estimator] 
+	An \textit{estimator} $\hat{\theta}_j$ for a parameter $\theta_j$ is a RV $\hat{\theta}_j(X_1,\dots,X_n)$ that is symbolized as a function of the observed data. 
+\end{boxdefinition}
+\begin{boxdefinition}[Estimate] 
+	An \textit{estimate} $\hat{\theta}_j(x_1,\dots,x_n)$ is a realization of the estimator RV, it's real value for the estimated parater. 
+\end{boxdefinition}
+\begin{boxdefinition}[Bias] 
+	The \textit{bias} of an estimator $\hat{\theta}$ is defined as:
+	\[
+		\mathrm{Bias}_\theta[\hat{\theta}]\eqdef\mathbb{E}_\theta[\hat{\theta}]-\theta=\mathbb{E}_\theta[\hat{\theta}-\theta]
+	\]
+	we say that an estimator is \textit{unbiased} if:
+	\[
+		\mathrm{Bias}_\theta[\hat{\theta}]=0 \ \ \text{or} \ \ \mathbb{E}_\theta[\hat{\theta}]=\theta  
+	\]
+\end{boxdefinition}
+\begin{boxdefinition}[Mean Squared Error] 
+	The \textit{mean squared error} (MSE) of an estimator $\hat{\theta}$ is defined as: 
+	\[
+		\mathrm{MSE}_\theta[\hat{\theta}] \eqdef
+		\mathbb{E}[(\hat{\theta}-\theta)^2] = 
+		\Var_\theta[\hat{\theta}]+(\mathbb{E}_\theta[\hat{\theta}]-\theta)^2
+	\]
+\end{boxdefinition}
+\begin{boxdefinition}[Consistent] 
+	A squence of estimators $\hat{\theta}^{(n)}$ of the parameter $\theta$ is called \textit{consistent} if for any $\epsilon>0$:
+	\[
+		P_\theta[\lvert\hat{\theta}^{(n)}-\theta\rvert>\epsilon]\xrightarrow[n\rightarrow\infty]{} 0
+	\]
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item The idea is that an estimator is consistent only if as the sample data increases the estimator approaches the real parameter. 
+\end{listb}
+\colnull 
+
+
+\subsection{Maximum-Likelihood Method}
+
+\begin{boxdefinition}[Likelihood Function] 
+	The \textit{likelhood function} $L$ is defined as: 
+	\[
+		L(x_1,\dots,x_n;\theta) =
+		\begin{cases}
+			p(x_1,\dots,x_n;\theta) & \textit{discr.} \\
+			f(x_1,\dots,x_n;\theta)& \textit{cont.}
+		\end{cases}
+	\]
+\end{boxdefinition}
+\begin{boxdefinition}[MLE] 
+	The \textit{maximum likelhood estimator} $\hat{\theta}$ for $\theta$ is defined as: 
+	\[
+		\hat{\theta}\in\left\{\argmax_{\theta\in\Theta}L(X_1,\dots,X_n;\theta)\right\}
+	\]
+\end{boxdefinition}
+\begin{boxguide}[Evaluation] 
+	Given a i.i.d. sample of data $x_1,\dots,x_n$ and a distribution $P_\theta$:
+	\begin{listnr}
+		\item Identify the parameters $\theta=(\theta_1,\dots,\theta_m)$ for the given distribution (e.g. if normal $\theta=(\theta_1=\mu,\theta_2=\sigma^2)$). 
+		\item Find the log likelihood, we use the log of the likelhood since it's much easier to differentiate afterwards, and the maximum of $L$ is preserved ($\forall \theta_j$): \[
+			\begin{split}
+				g(\theta_j) \eqdef& \log L(x_1,\dots,x_n;\theta_j) \\ =& \log\prod_{i=1}^{n} f(x_i; \theta_j)
+			\end{split}
+		\]
+		the goal here is to split $f$ into as many sums as possible using log properties (easier to differentiate). 
+		\item Find the maximum of the log likelihood, note that if the distribution is simple it might be easier to use the normal likelihood function and manually find the max, and if the distribution is hard we might have to use iterative methods instead of differentiation. Then for each parameter $\theta_j$:		\[
+			\frac{dg}{d\theta_j}\ \ \eqtxt{MAX} \ \ 0 
+		\]
+		Often we want to find inside the derivative set to 0 a sum or average ($S_n, \overline{X}_n$).  
+		\item State the final MLE, where each parameter estimator is the max found for $\theta_j$: 	\[
+			\hat{\theta}_{MLE}=(\hat{\theta}_1,\dots,\hat{\theta}_m)
+		\]
+	\end{listnr} 
+\end{boxguide}
+\subsection{Method of Moments}
+\begin{boxdefinition}[Theoretical Moments] 
+	Let $X$ be a RV, then: 
+	\begin{listnr}
+		\item The \textit{$k^{th}$ moment} of $X$ is:\\ $\displaystyle\mu_k \eqdef m_k = \mathbb{E}[X^k]$	
+		\item The \textit{$k^{th}$ central moment} of $X$ is: \\ $\displaystyle\mu_k^* \eqdef m_k^* = \mathbb{E}[(X-\mu)^k]$ 
+		\item The \textit{$k^{th}$ absolut moment} of $X$ is: \\ $\displaystyle M_k\eqdef \mathbb{E}[|X|^k] \quad$ \textit{(not used for MOM)}
+	\end{listnr} 
+\end{boxdefinition}
+\begin{boxdefinition}[Sample Moments] 
+	Let $X$ be a RV, then given a sample $x_1,\dots,x_n$ using the Law of Large numbers: 
+	\begin{listnr}
+		\item The \textit{$k^{th}$ moment} is evaluated as: \\
+		$\displaystyle\hat{\mu}_k(x_1,\dots,x_n) =\frac{1}{n}\sum_{i=1}^{n}x_i^k$
+		\item The $k^{th}$ \textit{central moment} is evaluated as:\\ 
+		$\displaystyle\hat{\mu}_k^*(x_1,\dots,x_n) = \frac{1}{n}\sum_{i=1}^{n}(x_i-\hat{\mu}_1)^k $
+	\end{listnr}
+\end{boxdefinition}
+\begin{boxguide}[Evaluation] 
+	Given a i.i.d. sample of data $x_1,\dots,x_n$ and a distribution $P_\theta$: 
+	\begin{listnr}
+		\item Identify the parameters $\theta=(\theta_1,\dots,\theta_m)$ for the given distribution. 
+		\item Since the distribution is given the expected value $\mathbb{E}_\theta\left[X\right]=g_1(\theta_1,\dots,\theta_m)$ and variance $\Var_\theta\left[X\right]=g_2(\theta_1,\dots,\theta_n)$ are known. The functions $g_i$ with $0\leq i\leq m$ are parametrized by $\theta$ and each of them is equal to a \textit{thoretical} moment. 
+		\item Since we have also the sample data to work with we can equate the theortical moments to the moment estimators:
+		\begin{align*}
+			g_1(\theta_1,\dots,\theta_m) &= \hat{\mu}_1(x_1,\dots,x_n) \\
+			g_2(\theta_1,\dots,\theta_m) &= \hat{\mu}_2^*(x_1,\dots,x_n) \\ 
+			&\shortvdotswithin{=} 
+			g_i(\theta_1,\dots,\theta_m) &= \hat{\mu}_i^*(x_1,\dots,x_n) \\ 
+			&\shortvdotswithin{=} 
+			g_m(\theta_1,\dots,\theta_m) &= \hat{\mu}_m^*(x_1,\dots,x_n) 
+		\end{align*}
+		\item Now since there are $m$ equations and $m$ unknown thetas we can solve for each $\theta$ and set it as the estimator.
+		\[
+			\hat{\theta}_{MOM}=(\hat{\theta}_1,\dots,\hat{\theta}_m)
+		\]
+	\end{listnr}
+\end{boxguide}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item The first moment is the expected value, estimated with: $\hat{\mu}_1(x_1,\dots,x_n) = \overline{x}_n$ (average) and the second \textit{central} moment is the variance, estimated with: $\hat{\mu}_2^*(x_1,\dots,x_n) = \frac{1}{n}\sum_{i=1}^{n}(x_i-\overline{x}_n)^2$. Note that we always use the \textit{central} moments for $i>1$. 
+	\item If we are given only the PDF of a distribution we can still evaluate the theoretical moments by solving the expected value integral (or summation if discrete). 
+	\item To check if $\hat{\theta}_i$ is unbiased we solve $\mathbb{E}_\theta[\hat{\theta}_i]$ (parametrized by $\theta$ is important) and check whether it equals $\theta$. 
+	\item [] \textbf{Properties} 
+	\item [] \textit{Useful to simplify MLM: } 
+	\item $\prod_{i=1}^{n}a\cdot x_i = a^n\prod_{i=1}^{n}x_i$ 
+	\item $\log\left(\prod_{i=1}^{n} x_i\right)=\sum_{i=1}^{n}\log(x_i)$ 
+	\item $\log\left(\sum_{i=1}^{n}e^{a\cdot x_i}\right) = a\sum_{i=1}^{n}x_i$ 
+\end{listb}
+
+\colfill
+\section{Hypothesis Testing}
+Let $X_1,\dots,X_n$ i.i.d. RVs, is distributed according to some distribution $P_\theta$ parametrized by $\theta=(\theta_1,\dots,\theta_m)\in\Theta$ where $\Theta=\Theta_0\cup\Theta_A$ is the set of all possible parameters for the selected distribution divided in two distinct subsets $\Theta_0\cap\Theta_A=\emptyset$. Then the goal is to \textit{test} wheter the unknown $\theta$ lies inside $\Theta_0$ or $\Theta_A$, this decision system is written as $H_0: \theta\in\Theta_0$ (\textit{null hypothesis}) and $H_A: \theta\in\Theta_A$ (\textit{alternative hypothesis}). 
+
+\begin{boxdefinition}[Test] 
+	Concretely a \textit{test} is composed of a function of the sample $t(x_1,\dots,x_n)=t$ and a \textit{rejection region} $K\subseteq\R$. The decision of the test is then written as RV: 
+	\[
+		I_{t\in K} = 
+		\begin{cases}
+			1, & t\in K: \ \textit{reject} \ H_0 \\
+			0, & t\notin K: \ \textit{do not reject} \ H_0 \\ 
+		\end{cases}
+	\]
+\end{boxdefinition}
+\begin{boxdefinition}[Test Statistic] 
+	The \textit{test statistic} $T(X_1,\dots,X_n)$ is a RV, it is distributed according to some standard statistic ($z$, $t$, $\chi^2$). 
+\end{boxdefinition}
+\subsection{Steps}
+\begin{listnr}
+	\item \textbf{Model}: identify the model $P_\theta$, or which distribution does $X_i$ $i.i.d. \sim P_\theta$ follow and what are the known and unknown parameters of $\theta$. 
+	\item \textbf{Hypothesis}: identify the null and alternative hypothesis, in the null hypothesis we should explicitely state the parameters value given. 
+	\item \textbf{Statistic}: identify the test statistic $T$ of $H_0$ and $H_A$ based on the sample size $n$ and the amount of known parameteres of $P_\theta$. 
+	\item \textbf{$\bm{H_0}$ Statistic}: state the distribution of the test statistic under $H_0$.  
+	\item \textbf{Rejection Region}: based on the test statistic and the significance level $\alpha$ evaluate the rejection region $K$. 
+	\item \textbf{Result}: based on the observed data and the rejection region reject $H_0$ or don't reject $H_0$. 
+	\item \textbf{Errors (optional)}: compute the probability of error, significance and power to decide how reliable is the test result. 
+\end{listnr}
+\colnull 
+
+\subsection{Hypotheses}
+To test an hypothesis we must establish the null $H_0$ and alternative $H_A$ hypotheses. The null hypothesis is the default set of parameters $\theta$, or what we expect to happen if our experiment fails and the alternative hypothesis is rejected. 
+\subsubsection*{Right-Tailed (RT)} 
+\[
+	H_0: \theta = \theta_0, \quad H_A=\theta>\theta_0 
+\]
+\noindent
+\begin{tikzpicture}
+	\begin{axis}[
+		height=5cm, 
+		width=8.2cm,
+		enlargelimits=false,
+		ymax=0.6, 
+		xmax=5, 
+		xmin=-5,
+		samples=100, 
+		ytick=\empty,%{0,0.1,...,0.4}, 
+		xtick={0.4},
+		xticklabel={$c$},
+		axis x line=bottom,
+		axis y line=none,
+		legend style={draw=none},
+		ticklabel style = {font=\tiny}, 
+	]		
+		\addplot [fill=red!20, fill opacity=0.8, domain=-5:0.4] {gauss(-1,1.2)} node [pos=0.75, above, font=\tiny] {$H_0$} \closedcycle;
+		\addplot [fill=black!05, fill opacity=0.8, domain=0.4:5] {gauss(1,1.2)} node [pos=0.15, above, font=\tiny] {$H_A$} \closedcycle;
+		\addplot [fill=orange!20, fill opacity=0.8, domain=-5:0.4] {gauss(1,1.2)} \closedcycle;
+		\addplot [fill=yellow!20, fill opacity=0.8, domain=0.4:5] {gauss(-1,1.2)} \closedcycle;
+		\draw[black, dashed] (axis cs:0.4,0) -- (axis cs:0.4,0.5) node[left, yshift=-0.5em, font=\tiny]{$\longleftarrow$ Accept $H_0$} node[right, yshift=-0.5em, font=\tiny]{Reject $H_0 \longrightarrow$};
+		\node[above,black,font=\tiny] at (axis cs:0.8,0.01) {$\alpha$};
+		\node[above,black,font=\tiny] at (axis cs:-0.2,0.01) {$\beta$};
+		\node[above,black,font=\tiny] at (axis cs:1.1,0.18) {$1-\beta$};
+		\node[above,black,font=\tiny] at (axis cs:-1,0.18) {$1-\alpha$};
+	\end{axis}
+\end{tikzpicture}
+\\[1em]
+
+\subsubsection*{Left-Tailed (LT)}
+\[
+	H_0: \theta = \theta_0, \quad H_A=\theta<\theta_0 
+\]
+\noindent
+\begin{tikzpicture}
+	\begin{axis}[
+		height=5cm, 
+		width=8.2cm,
+		enlargelimits=false,
+		ymax=0.6, 
+		xmax=5, 
+		xmin=-5,
+		samples=100, 
+		ytick=\empty,%{0,0.1,...,0.4}, 
+		xtick={-0.4},
+		xticklabel={$c$},
+		axis x line=bottom,
+		axis y line=none,
+		legend style={draw=none},
+		ticklabel style = {font=\tiny}, 
+	]		
+		\addplot [fill=black!05, fill opacity=0.8, domain=-5:-0.4] {gauss(-1,1.2)} node [pos=0.85, above, font=\tiny] {$H_A$} \closedcycle;
+		\addplot [fill=red!20, fill opacity=0.8, domain=-0.4:5] {gauss(1,1.2)} node [pos=0.25, above, font=\tiny] {$H_0$} \closedcycle;
+		\addplot [fill=orange!20, fill opacity=0.8, domain=-0.4:5] {gauss(-1,1.2)} \closedcycle;
+		\addplot [fill=yellow!20, fill opacity=0.8, domain=-5:-0.4] {gauss(1,1.2)} \closedcycle;
+		\draw[black, dashed] (axis cs:-0.4,0) -- (axis cs:-0.4,0.5) 
+			node[left, yshift=-0.5em, font=\tiny]{$\longleftarrow$ Reject $H_0$} 
+			node[right, yshift=-0.5em, font=\tiny]{Accept $H_0 \longrightarrow$};
+		\node[above,black,font=\tiny] at (axis cs:-0.8,0.01) {$\alpha$};
+		\node[above,black,font=\tiny] at (axis cs:0.2,0.01) {$\beta$};
+		\node[above,black,font=\tiny] at (axis cs:1,0.18) {$1-\alpha$};
+		\node[above,black,font=\tiny] at (axis cs:-1.1,0.18) {$1-\beta$};
+	\end{axis}
+\end{tikzpicture}
+\subsubsection*{Two-Tailed (TT)}
+\[
+	H_0: \theta = \theta_0, \quad H_A=\theta\neq\theta_0 
+\]
+\noindent
+\begin{tikzpicture}
+	\begin{axis}[
+		height=5cm, 
+		width=8.2cm,
+		enlargelimits=false,
+		ymax=0.6, 
+		xmax=5.5, 
+		xmin=-5.5,
+		samples=100, 
+		ytick=\empty,%{0,0.1,...,0.4}, 
+		xtick=\empty,
+		axis x line=bottom,
+		axis y line=none,
+		legend style={draw=none},
+		ticklabel style = {font=\tiny}, 
+	]		
+		\addplot [fill=black!05, fill opacity=0.8, domain=-5.5:-1.3] {gauss(-2,1)} node [pos=0.8, above, font=\tiny] {$H_A$} \closedcycle;
+		\addplot [fill=black!05, fill opacity=0.8, domain=1.3:5.5] {gauss(2,1)} node [pos=0.2, above, font=\tiny] {$H_A$} \closedcycle;
+		\addplot [fill=red!20, fill opacity=0.8, domain=-1.3:1.3] {gauss(0,1)} node [pos=0.50, above, font=\tiny] {$H_0$} \closedcycle;
+		\addplot [fill=yellow!20, fill opacity=0.8, domain=-5:-1.3] {gauss(0,1)} \closedcycle;
+		\addplot [fill=yellow!20, fill opacity=0.8, domain=1.3:5] {gauss(0,1)} \closedcycle;
+		\addplot [fill=orange!20, fill opacity=0.8, domain=-1.3:5] {gauss(-2,1)} \closedcycle;
+		\addplot [fill=orange!20, fill opacity=0.8, domain=-5:1.3] {gauss(2,1)} \closedcycle;
+		%\addplot [fill=orange!20, fill opacity=0.8, domain=-0.4:5] {gauss(-1,1.2)} \closedcycle;
+		%\addplot [fill=yellow!20, fill opacity=0.8, domain=-5:-0.4] {gauss(1,1.2)} \closedcycle;
+		\draw[black, dashed] (axis cs:-1.3,-0.1) -- (axis cs:-1.3,0.55) 
+			node[left, yshift=-0.5em, font=\tiny]{$\longleftarrow$ Reject $H_0$}; 
+		\draw[black, dashed] (axis cs:1.3,-0.1) -- (axis cs:1.3,0.55)
+			node[right, yshift=-0.5em, font=\tiny]{Reject $H_0 \longrightarrow$};
+		\node[above,black,font=\tiny] at (axis cs:0,0.49) {Accept $H_0$};
+		\node[above,black,font=\tiny] at (axis cs:0.8,0.02) {$\beta$};
+		\node[above,black,font=\tiny] at (axis cs:-0.8,0.02) {$\beta$};
+		\node[above,black,font=\tiny] at (axis cs:-1.6,0) {$\frac{\alpha}{2}$};
+		\node[above,black,font=\tiny] at (axis cs:1.6,0) {$\frac{\alpha}{2}$};
+		\node[above,black,font=\tiny] at (axis cs:0,0.25) {$1-\alpha$};
+		\node[above,black,font=\tiny] at (axis cs:-2,0.25) {$1-\beta$};
+		\node[above,black,font=\tiny] at (axis cs:2,0.25) {$1-\beta$};
+	\end{axis}
+\end{tikzpicture}
+\noindent 
+
+
+\subsection{Statistic}
+{\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\hsize}{c|c|c|c}
+	\hline
+	$X_i$ & $n$ & $\sigma^2$ & $Statistic$ \\ 
+	\hline 
+	$\mathcal{N}(\mu,\sigma^2)$ & any & known & z-Test\\ 
+	$\mathcal{N}(\mu,\sigma^2)$ & small & unknown & t-Test \\ 
+	any & any & any & LR-Test \\ 
+
+	\hline 
+\end{tabularx}} 
+% both H_0 and H_A are distributed according to the test statistic, what we want to prove statistically is that the data is distributed with the test statistic parametrized by theta_a instead of theta_0. 
+
+%$\frac{\overline{X}-\mu}{\sigma / \sqrt{n}} \sim \mathcal{N}(0,1)$
+\subsubsection*{LR-Test}
+\begin{boxdefinition}[Likelihood-Ratio] 
+	Let $L(x_1,\dots,x_n;\theta)$ be the likelhood function where $\theta_0\in\Theta_0$ and $\theta_A\in\Theta_A$, then the \textit{Likelihood-Ratio} is defined as:
+	\[
+		R(x_1,\dots,x_n;\theta_0,\theta_A)\eqdef\frac{L(x_1,\dots,x_n;\theta_0)}{L(x_1,\dots,x_n;\theta_A)}
+	\]
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item The intuition is that the likelihood function will tend to be the highest near the true value of $\theta$, thus by evaluating the Likelihood-Ratio $R$ between $\theta_0$ and $\theta_A$ we can conclude that if $R<1$ the probability of getting the observed data is higher under $H_A$ where if $R>1$ the probability of getting the obeserved data is higher under $H_0$. 
+\end{listb}
+\begin{boxtheorem}[Neyman-Pearson] 
+	Let $T\eqdef R(x_1,\dots,x_n;\theta_0,\theta_A)$ be the test statistic, $K\eqdef[0,c)$ be the rejection region and $\alpha^*\eqdef P_{\theta_0}\left[T\in K\right] = P_{\theta_0}\left[T<c\right]$. Then for any other test $(T',K')$ with $P_{\theta_0}[T'\in K']\leq \alpha^*$ we have:
+	\[
+		P_{\theta_A}\left[T'\in K'\right] \leq P_{\theta_A}\left[T\in K\right]
+	\]
+\end{boxtheorem}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item The idea of the lemma is that making a decision based on the Likelihood-Ratio Test with $T$ and $K$ will maximise the power of the test, any other test will have a smaller power. Thus given a fixed $\alpha^*$, this is \textit{the best} way to do hypothesis testing.
+\end{listb}
+\colnull
+
+\subsubsection*{z-Test}
+\begin{boxdefinition}[z-Test] 
+	The \textit{z-test} is used when the data follows a normal distribution and $\sigma^2$ is known. 
+	\begin{listnr}
+		\item \textit{Statistic Under $H_0$}:
+		\[
+			T=\frac{\overline{X_n}-\mu_0}{\sigma/\sqrt{n}} \sim \mathcal{N}(0,1)
+		\]
+		\item \textit{Rejection Region}:
+		\begin{listb}
+			\item $K \ \eqtxt{RT} \	\left[z_{1-\alpha},\infty\right)$
+			\item $K \ \eqtxt{LT} \ \left(-\infty, z_\alpha\right]$
+			\item $K \ \eqtxt{TT} \ (-\infty, z_{\frac{\alpha}{2}}]\cup [z_{1-\frac{\alpha}{2}},\infty)$
+		\end{listb}
+	\end{listnr}	
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item $\Phi^{-1}(\alpha)=z_\alpha=-z_{1-\alpha}$
+	\item $z_{0.95}=1.645$, $z_{0.975}=1.960$
+\end{listb}
+
+\subsubsection*{t-Test}
+\begin{boxdefinition}[t-Test] 
+	The \textit{t-test} is used when the data follows a normal distribution, $n$ is small (usually $n<30$) and $\sigma^2$ is unknown. 
+	\begin{listnr}
+		\item \textit{Statistic Under $H_0$}:
+		\[
+			T=\frac{\overline{X_n}-\mu_0}{S/\sqrt{n}} \sim t(n-1)
+		\]
+		where $S^2=\frac{1}{n-1}\sum_{i=1}^{n}(X_i-\overline{X_n})^2$ 
+		\item \textit{Rejection Region}:
+		\begin{listb}
+			\item $K \ \eqtxt{RT} \ \left[t_{n-1,1-\alpha},\infty\right)$
+			\item $K \ \eqtxt{LT} \ \left(-\infty, t_{n-1,\alpha}\right]$
+			\item $K \ \eqtxt{TT} \ (-\infty, t_{n-1,\frac{\alpha}{2}}]\cup [t_{n-1,1-\frac{\alpha}{2}},\infty)$
+		\end{listb}
+	\end{listnr}		
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item $t_{m,\alpha}=-t_{m,1-\alpha}$
+\end{listb}
+
+
+\colfill  
+
+\subsubsection*{Two-Sample Tests}
+\begin{boxdefinition}[Paried Two-Sample Test]
+	The \textit{paried two-sample test} is used when we have $Y_1,\dots,Y_n \ i.i.d. \sim \mathcal{N}(\mu_Y,\sigma_Y^2)$ and $Z_1,\dots,Z_n \ i.i.d. \sim \mathcal{N}(\mu_Z,\sigma_Z^2)$ and $X_i=Y_i-Z_i$, then $X_1,\dots,X_n \ i.i.d. \sim \mathcal{N}(\mu_Y-\mu_Z, \sigma=\sigma_Y^2-\sigma_Z^2)$, thus if $\sigma$ is known we proceed with a z-test on $X$ otherwise with a t-test on $X$. 
+\end{boxdefinition}
+\begin{boxdefinition}[Unpaired Two-Sample Test] 
+	The \textit{unparied two-sample} test is used when we have $X_1,\dots,X_n \ i.i.d. \sim \mathcal{N}(\mu_X,\sigma_X^2)$ and $Y_1,\dots,Y_n \ i.i.d. \sim \mathcal{N}(\mu_Y,\sigma_Y^2)$ for $X_i,Y_j$ independent. \\ 
+	For known $\sigma_X$, $\sigma_Y$: 
+	\begin{listnr}
+		\item \textit{Hypothesis}: $H_0: \mu_X-\mu_Y=\mu_0$ 
+		\item \textit{Statistic Under $H_0$}:
+		\[
+			T=\frac{\overline{X}_n-\overline{Y}_n-\mu_0}{\sqrt{\frac{\sigma_X^2}{n}+\frac{\sigma_Y^2}{m}}} \sim \mathcal{N}(0,1)
+		\]
+		\item \textit{Rejection Region}:
+		\begin{listb}
+			\item $K \ \eqtxt{RT} \	\left[z_{1-\alpha},\infty\right)$
+			\item $K \ \eqtxt{LT} \ \left(-\infty, z_\alpha\right]$
+			\item $K \ \eqtxt{TT} \ (-\infty, z_{\frac{\alpha}{2}}]\cup [z_{1-\frac{\alpha}{2}},\infty)$
+		\end{listb}
+	\end{listnr}	
+	For unknown $\sigma_X=\sigma_Y>0$: 	
+	\begin{listnr}
+		\item \textit{Hypothesis}: $H_0: \mu_X-\mu_Y=\mu_0$ 
+		\item \textit{Statistic Under $H_0$}:
+		\[
+			T=\frac{\overline{X}_n-\overline{Y}_n-\mu_0}{S\sqrt{\frac{1}{n}+\frac{1}{m}}} \sim t_{n+m-2}
+		\]
+		\item \textit{Rejection Region} ($d\eqdef n+m-2$): 
+		\begin{listb}
+			\item $K \ \eqtxt{RT} \ \left[t_{d,1-\alpha},\infty\right)$
+			\item $K \ \eqtxt{LT} \ \left(-\infty, t_{d,\alpha}\right]$
+			\item $K \ \eqtxt{TT} \ (-\infty, t_{d,\frac{\alpha}{2}}]\cup [t_{d,1-\frac{\alpha}{2}},\infty)$
+		\end{listb}
+	\end{listnr}	
+\end{boxdefinition}
+\colnull 
+
+\subsection{Errors, Significance, Power}
+\noindent
+We use the test statistic $T$ distributed according to $P_\theta$ to evaluate the probability of errors:\\[1em]  
+{\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\hsize}{c|c|c}
+	\hline
+	%\rule{0pt}{1.3em}orange
+	$H_0$ & Don't Reject ($T\notin K$) & Reject ($T\in K$) \\
+	\hline
+	& & Type 1 Error ($\alpha$)\\
+	\textit{true} & Correct Decision & False Alarm \\
+	& & False Positive \\
+	\hline
+	& Type 2 Error ($\beta$) & \\
+	\textit{false} & Missed Alarm & Correct Decision \\
+	& False Negative & \\
+	\hline
+\end{tabularx}} 
+\begin{listb}
+	\item [] \textit{Probabilities:}
+	\item \tikz\draw[black,fill=yellow!20] (0,0) circle (.7ex); \ \textbf{Type 1 Error}
+	\item [] $P\left[T\in K \mid H_0 \ \textit{true}\right] = P_{\theta_0}\left[T\in K\right] = \alpha$
+	\item \tikz\draw[black,fill=orange!20] (0,0) circle (.7ex); \ \textbf{Type 2 Error}
+	\item [] $P\left[T\notin K \mid H_0 \ \textit{false}\right] = P_{\theta_A}\left[T\notin K\right] = \beta$
+	\item \tikz\draw[black,fill=red!20] (0,0) circle (.7ex); \ \textbf{Significance Level}
+	\item [] $P\left[T\notin K \mid H_0 \ \textit{true}\right] = P_{\theta_0}\left[T\notin K\right] = 1-\alpha$
+	\item \tikz\draw[black,fill=black!05] (0,0) circle (.7ex); \ \textbf{Power}
+	\item [] $P\left[T\in K \mid H_0 \ \textit{false}\right] = P_{\theta_A}\left[T\in K\right] = 1-\beta$
+	\item [] \textit{Note:} 
+	\item The significance level should be small (near 0) and the power large (near 1). 
+	\item Smaller $\alpha \Rightarrow$ Smaller power. 
+\end{listb}
+\subsection{P-Value}
+\begin{boxdefinition}[P-Value] 
+	The \textit{p-value} is the probability of getting the observed value of the test statistic $T(\omega)=t(x_1,\dots,x_n)$, or a value with even greater evidence against $H_0$, if the null hypothesis is actually true. 
+	\begin{listb}
+		\item $\textit{p-value} \ \eqtxt{RT} \ P_{\theta_0}\left[T \geq T(\omega)\right]$ 
+		\item $\textit{p-value} \ \eqtxt{LT} \ P_{\theta_0}\left[T \leq T(\omega)\right]$ 
+		\item $\textit{p-value} \ \eqtxt{TT} \ P_{\theta_0}\left[|T| \geq T(\omega)\right]$ 
+	\end{listb}
+\end{boxdefinition}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item We can then still decide the test and reject $H_0$ if $\textit{p-value}<\alpha$ ($\alpha=0.01$ very strong evidence, $\alpha=0.05$ strong evidence, $\alpha>0.1$ weak evidence). 
+	\item The \textit{p-value} can also be viewed as the smallest $\alpha^*$ such that $H_0$ is rejected given the observed value of the test statistic $t(x_1,\dots,x_n)$. 
+\end{listb}
+\colnull
+
+\subsection{Confidence Interval}
+\begin{boxdefinition}[Confidence Interval] 
+	Given $\alpha$ (type-1 error) and an unknown parameter $\theta$ the \textit{confidence interval} $C(X_1,\dots,X_n)\eqdef[a,b]$ tells us that with probability at least $1-\alpha$ the real parameter $\theta$ is contained in $C$ ($\theta\in C$). Evaluated as: 
+\[
+	\begin{split}
+		1-\alpha 
+		&\leq P_\theta[\theta\in C(X_1,\dots,X_n)]\\
+		&= P_\theta[a <\theta< b]\\
+	\end{split}
+\]
+Where $a$ and $b$ are: 
+\begin{listnr}
+	\item \textit{For $\theta\eqdef\mu$ and known $\sigma$:}
+	\item[]	$a\eqdef \overline{X}_n-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}$
+	\item[] $b\eqdef \overline{X}_n+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}$
+	\item \textit{For $\theta\eqdef\mu$ and unknown $\sigma$:}
+	\item[] $a\eqdef \overline{X}_n-t_{n-1,1-\frac{\alpha}{2}}\frac{S}{\sqrt{n}}$
+	\item[] $b\eqdef \overline{X}_n+t_{n-1,1-\frac{\alpha}{2}}\frac{S}{\sqrt{n}}$
+	\item \textit{For $\theta\eqdef\sigma^2$ and unknown $\mu,\sigma$:}
+	\item[] $a\eqdef\frac{(n-1)S^2}{\chi^2_{n-1,1-\frac{\alpha}{2}}}$
+	\item[] $b\eqdef\frac{(n-1)S^2}{\chi^2_{n-1,\frac{\alpha}{2}}}$
+\end{listnr}
+\end{boxdefinition} 
+
+\colfill
+
+
+
+\section{Discrete Distributions}
+
+\subsection{Discrete Uniform Distribution}
+{\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\hsize}{s|b}
+	\hline
+	Notation & $X \sim \mathcal{U}(a,b)$ \\ 
+	Experiment & What is the probability that we pick the value $x$ knowing that all $n=b-a+1$ values between $a$ and $b$ are equally likely to be picked? \\
+	Support & $x\in\left\{a,a+1,\dots,b-1,b\right\}$ \\
+	$p_X(x)$ & $\displaystyle \frac{1}{n}$
+	\\[1em]
+	$F_X(x)$ & $\displaystyle \frac{x-a+1}{n}$\\
+	$\mathbb{E}\left[X\right]$ & $\frac{a+b}{2}$ \\
+	$\Var\left[X\right]$ & $\frac{(b-a+1)^2-1}{12}$ \\[1em]
+	\hline
+\end{tabularx}}
+\\[1em]
+% \noindent
+% \resizeToWidth{
+% \begin{tikzpicture}[
+% 		declare function={uniform(\x,\xl,\xu)= (\x>=\xl)*(\x<=\xu)*1/(\xu-\xl);}
+% 	]
+% 	\begin{axis}[
+% 		height=3.5cm, 
+% 		width=\pgfplotswidth,
+% 		ytick={0.125}, 
+% 		yticklabels={$\frac{1}{n}$},
+% 		xtick={6,14}, 
+% 		xticklabels={$a$,$b$},
+% 		ymax=0.2,  
+% 		xmax=21, 
+% 		xmin=0,
+% 		samples at={0,...,20},%
+% 		axis x line=bottom,
+% 		axis y line=left, 
+% 		ticklabel style = {font=\tiny},
+% 		]
+% 		\addplot [ycomb, mark options={draw=black}, mark=*, black!15, mark size=2pt] {uniform(x,6,14)};
+% 		\draw[black!15, text=black, decorate,decoration={brace,amplitude=10pt,raise=4pt} ] (axis cs:6, 0.125) -- (axis cs:14, 0.125) node[midway, yshift=2.2em,font=\tiny]{$n$};
+% 	\end{axis}
+% \end{tikzpicture}
+% }{\columnwidth}
+% \separator
+
+\subsection{Bernulli Distribution}
+
+{\renewcommand{\arraystretch}{2}
+\noindent 
+\begin{tabularx}{\hsize}{s|b}
+	\hline
+	Notation & $X \sim \mathrm{Be}(p)$ \\ 
+	Experiment & What is the probability of success or failure is success has probability $p$? \\
+	Support & $x\in\left\{0,1\right\}$ \\
+	$p_X(x)$ & $\begin{cases}
+					1-p & x=0 \\
+					p & x=1 
+				\end{cases}$
+	\\[1em]
+	$F_X(x)$ & $\begin{cases}
+					0 & x<0 \\
+					1-p & 0\leq x \leq 1 \\ 
+					1 & x>1 
+				\end{cases}$ 
+	\\
+	$\mathbb{E}\left[X\right]$ & $p$ \\
+	$\Var\left[X\right]$ & $p(1-p)$ \\[1em]
+	\hline
+\end{tabularx}}
+
+\colnull
+% \noindent
+% \resizeToWidth{
+% \begin{tikzpicture}[
+% 		declare function={bernulli(\x,\p) = (1-\x)*\p + \x*(1-\p);}
+% 	]
+% 	\begin{axis}[%
+% 		height=3.5cm, 
+% 		width=\pgfplotswidth,
+% 		ytick={0.3,0.7}, 
+% 		yticklabels={$p$,$1-p$},
+% 		xtick={0,1}, 
+% 		xticklabels={$0$,$1$},
+% 		enlargelimits=false,
+% 		ymax=1,  
+% 		xmax=2, 
+% 		xmin=-1,
+% 		ymin=0,
+% 		samples at={0,1},%
+% 		axis x line=bottom,
+% 		axis y line=left, 
+% 		ticklabel style = {font=\tiny},
+% 		]
+% 		\addplot [ycomb, mark options={draw=black}, mark=*, black!15, mark size=2pt] {bernulli(x,0.3)};
+% 	\end{axis}
+% \end{tikzpicture}}{\columnwidth}
+% \separator 
+
+\subsection{Binomial Distribution}
+
+{\renewcommand{\arraystretch}{2}
+\begin{tabularx}{\hsize}{s|b}
+	\hline
+	Notation & $X \sim \mathrm{Bin}(n, p)$ \\ 
+	Experiment & What is the probability of $x$ successes in $n$ trials if one success has probability $p$? \\
+	Support & $x\in\left\{0,1,\dots,n\right\}$ \\
+	$p_X(x)$ & $\displaystyle {n \choose x} \cdot p^x \cdot (1-p)^{n-x}$
+	\\[1em]
+	$F_X(x)$ & $\displaystyle\sum_{i=1}^{x}p_X(i)$\\
+	$\mathbb{E}\left[X\right]$ & $np$ \\
+	$\Var\left[X\right]$ & $np(1-p)$ \\[1em]
+	\hline
+\end{tabularx}}
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item \textit{Poisson Approximation}: If $X\sim\mathrm{Bin}(n, p)$ and $n\gg 0$, $np<5$, then $X\sim \mathrm{Poi}(np)$. 
+	\item \textit{Normal Approximation}: If $X\sim\mathrm{Bin}(n, p)$ and $n\gg 0$, $np>5$, $n(1-p)>5$ with $p=P\left[a < X \leq b\right]$, then:  \\ 
+	$p \approx \Phi\left(\frac{b+\frac{1}{2} -np}{\sqrt{np(1-p)}}\right)-\Phi\left(\frac{a+\frac{1}{2} -np}{\sqrt{np(1-p)}}\right)$. 
+\end{listb}
+% \noindent
+% \resizeToWidth{
+% \begin{tikzpicture}
+% 	\begin{axis}[%
+% 			height=4cm, 
+% 			width=\pgfplotswidth,
+% 			ytick={0,0.1,...,0.4}, 
+% 			xtick={0,5,...,20}, 
+% 			ticklabel style = {font=\tiny},
+% 			enlargelimits=false,
+% 			ymax=0.5, 
+% 			xmax=21, 
+% 			xmin=0,
+% 			samples at={0,1,...,20},%
+% 			axis x line=bottom,
+% 			axis y line=left, 
+% 			legend style={draw=none, font=\tiny},
+% 			legend cell align={left},
+% 			legend entries={{}{$\mathrm{Bin}(10,0.5)$}, {}{$\mathrm{Bin}(20, 0.5)$}, {}{$\mathrm{Bin}(20, 0.8)$}}
+% 		]
+% 		\addlegendimage{only marks, mark=*, opacity=0.8, fill=red!20, mark size=0.25em}
+% 		\addlegendimage{only marks, mark=*, opacity=0.8, fill=orange!20, mark size=0.25em}
+% 		\addlegendimage{only marks, mark=*, opacity=0.8, fill=yellow!20, mark size=0.25em}
+% 		\addplot [ycomb, mark options={draw=black, fill=orange!20}, black!15, mark=*, mark size=2pt] {binomial(20,0.5)};
+% 		\addplot [ycomb, mark options={draw=black, fill=yellow!20}, black!15, mark=*, mark size=2pt] {binomial(20,0.8)};
+% 		\addplot [ycomb, mark options={draw=black, fill=red!20}, black!15, mark=*, mark size=2pt] {binomial(10,0.5)};
+% 	  \end{axis}
+% \end{tikzpicture}}{\columnwidth}
+% \separator 
+
+\subsection{Geometric Distribution}
+{\renewcommand{\arraystretch}{2}
+\begin{tabularx}{\hsize}{s|b}
+	\hline
+	Notation & $X \sim \mathrm{Geo}(p)$ \\ 
+	Experiment & What is the probability of one success in $x$ trials if one success has probability $p$? \\
+	Support & $x\in\left\{1,2,\dots\right\}$ \\
+	$p_X(x)$ & $\displaystyle (1-p)^{x-1}\cdot p$
+	\\
+	$F_X(x)$ & $1-(1-p)^x$\\
+	$\mathbb{E}\left[X\right]$ & $\displaystyle\frac{1}{p}$ \\
+	$\Var\left[X\right]$ & $\displaystyle\frac{1-p}{p^2}$ \\[1em]
+	\hline
+\end{tabularx}}
+\\[1em]
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item \textit{Memoryless:}\\ $P\left[X>m+n\mid X\geq m\right] = P\left[X>n\right]$ 
+	\item \textit{Sum:} $(\sum_{i=1}^{n} X_i \sim \mathrm{Geo}(p))\sim \mathrm{NB}(n,p)$
+\end{listb}
+
+\colnull
+
+\subsection{Negative Binomial Distribution}
+{\renewcommand{\arraystretch}{2}
+\begin{tabularx}{\hsize}{s|b}
+	\hline
+	Notation & $X \sim \mathrm{NB}(r,p)$ \\ 
+	Experiment & What is the probability of $r$ successes in $x$ trials if one success has probability $p$? \\
+	Support & $x\in\left\{r,r+1,r+2,\dots\right\}$ \\
+	$p_X(x)$ & $\displaystyle{x-1 \choose r-1}\cdot(1-p)^{x-r}\cdot p^r$
+	\\[1em]
+	$F_X(x)$ & $\displaystyle\sum_{i=1}^{x}p_X(i)$\\
+	$\mathbb{E}\left[X\right]$ & $\displaystyle\frac{r}{p}$ \\
+	$\Var\left[X\right]$ & $\displaystyle\frac{r(1-p)}{p^2}$ \\[1em]
+	\hline
+\end{tabularx}}
+\\[1em]
+
+\subsection{Hypergeometric Distribution}
+{\renewcommand{\arraystretch}{2}
+\begin{tabularx}{\hsize}{s|b}
+	\hline
+	Notation & $X \sim \mathrm{HGeom}(n,m,r)$ \\ 
+	Experiment & What is the probability of picking $x$ elements of \textit{type 1} out of $m$, if there are $r$ elements of \textit{type 1} and $n-r$ elements of type \textit{type 2}? \\
+	Support & $x\in\left\{1,2,\dots,\min(m,r)\right\}$ \\
+	$p_X(x)$ & $\displaystyle {r \choose x}{n-r \choose m-x}  \Big/ {n \choose m}$
+	\\[1em]
+	$F_X(x)$ & $\displaystyle\sum_{i=1}^{x}p_X(i)$\\
+	$\mathbb{E}\left[X\right]$ & $\displaystyle\frac{rm}{n}$ \\
+	$\Var\left[X\right]$ & $\displaystyle\frac{(n-r)nm(n-m)}{(2n-r)^2(n-1)}$ \\[1em]
+	\hline
+\end{tabularx}}
+\\
+\begin{listb}
+	\item [] \textbf{Note}
+	\item The items are picked \textit{without} replacement. 
+\end{listb}
+\colnull
+
+\subsection{Poisson Distribution}
+{\renewcommand{\arraystretch}{2}
+\begin{tabularx}{\hsize}{s|b}
+	\hline
+	Notation & $X \sim \mathrm{Poi}(\lambda)$ \\ 
+	Experiment & What is the probability that $x$ events happen in one unit of time knowing that on average $\lambda$ events happen on one unit of time? \\
+	Support & $x\in\left\{0,1,\dots\right\}=\N_0$ \\
+	$p_X(x)$ & $\displaystyle  e^{-\lambda}\frac{\lambda^x}{x!}$
+	\\[1em]
+	$F_X(x)$ & $\displaystyle e^{-\lambda}\sum_{i=0}^{x}\frac{\lambda^i}{i!}$\\
+	$\mathbb{E}\left[X\right]$ & $\lambda$ \\
+	$\Var\left[X\right]$ & $\lambda$ \\[1em]
+	\hline
+\end{tabularx}}
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item Let $X=\sum_{i=1}^{n} X_i\sim\mathrm{Poi}(\lambda_i)$ where $X_i$ are independend, then $X\sim\mathrm{Poi}\left(\sum_{i=1}^{n}\lambda_i\right)$
+	\item If $X = c + Y$ and $Y \sim \mathrm{Poi}(\lambda)$ then $X \sim \mathrm{Poi}(\lambda)$. 
+\end{listb}
+% \\[1em]
+% \noindent
+% \begin{tikzpicture}
+% 	\begin{axis}[%
+% 		height=4cm, 
+% 		width=7.5cm,
+% 		ytick={0,0.1,...,0.4},
+% 		xtick={0,5,...,20}, 
+% 		ticklabel style = {font=\tiny},
+% 		enlargelimits=false,
+% 		ymax=0.4, 
+% 		xmax=21, 
+% 		xmin=0,
+% 		samples at={0,1,...,20},
+% 		axis x line=bottom,
+% 		axis y line=left, 
+% 		legend style={draw=none, font=\tiny},
+% 		legend cell align={left},
+% 		legend entries={$\mathrm{Poi}(1)$,$\mathrm{Poi}(8)$,$\mathrm{Poi}(15)$},
+% 		]
+
+% 		\addlegendimage{only marks, mark=*, opacity=0.8, fill=red!20, mark size=0.25em}
+% 		\addlegendimage{only marks, mark=*, opacity=0.8, fill=orange!20, mark size=0.25em}
+% 		\addlegendimage{only marks, mark=*, opacity=0.8, fill=yellow!20, mark size=0.25em}
+% 		\addplot [ycomb, mark options={draw=black, fill=red!20}, black!15,mark=*, mark size=2pt] {poisson(1)} \closedcycle;
+% 		\addplot [ycomb, mark options={draw=black, fill=orange!20}, black!15, mark=*, mark size=2pt] {poisson(8)}\closedcycle;
+% 		\addplot [ycomb, mark options={draw=black, fill=yellow!20}, black!15, mark=*, mark size=2pt] {poisson(15)}\closedcycle;
+% 	  \end{axis}
+% \end{tikzpicture}
+
+\colnull
+
+\section{Continuous Distributions}
+\subsection{Uniform Distribution}
+{\renewcommand{\arraystretch}{2}
+\begin{tabularx}{\hsize}{s|b}
+	\hline
+	Notation & $X \sim \mathcal{U}(a,b)$ \\ 
+	Experiment & What is the probability that we pick the value $x$ knowing that all values between $a$ and $b$ are equally likely to be picked? \\
+	Support & $x\in[a,b]$ \\
+	$f_X(x)$ & $\begin{cases}
+					\frac{1}{b-a} & a\leq x \leq b \\
+					0 & \text{else}
+				\end{cases}$ \\[1em]
+	$F_X(x)$ & $\begin{cases}
+					0 & x < a \\ 
+					\frac{x-a}{b-a} & a\leq x \leq b \\
+					1 & x > b 
+				\end{cases}$ \\
+	$\mathbb{E}\left[X\right]$ & $\displaystyle\frac{a+b}{2}$ \\
+	$\Var\left[X\right]$ & $\displaystyle\frac{(b-a)^2}{12}$ \\[1em]
+	\hline
+\end{tabularx}}
+
+\subsection{Normal Distribution}
+{\renewcommand{\arraystretch}{2}
+\begin{tabularx}{\hsize}{s|b}
+	\hline
+	Notation & $X \sim \mathcal{N}(\mu,\sigma^2)$ \\ 
+	Experiment & What is the probability that we pick the number $x$ knowing that all values have a mean of $\mu$ and a standard deviation of $\sigma$? \\
+	Support & $x\in\R$ \\
+	$f_X(x)$ & $\displaystyle\frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$ \\
+	$F_X(x)$ & $\Phi\left(\frac{x-\mu}{\sigma}\right), \ $ \textit{(use table)} \\
+	$\mathbb{E}\left[X\right]$ & $\mu$ \\
+	$\Var\left[X\right]$ & $\sigma^2$ \\
+	\hline
+\end{tabularx}}
+\noindent\\[0.5em]
+\begin{tikzpicture}
+	\begin{axis}[
+		height=4cm, 
+		width=8.2cm,
+		enlargelimits=false,
+		ymax=0.41, 
+		xmax=4, 
+		xmin=-4,
+		domain=0:9, 
+		samples=100, 
+		ytick=\empty,%{0,0.1,...,0.4}, 
+		xtick={-3,...,3},
+		xticklabels={$\mu-3\sigma$,  $\mu-2\sigma$,  $\mu-\sigma$, $\mu$, $\mu+\sigma$, $\mu+2\sigma$,$\mu+3\sigma$},
+		axis x line=bottom,
+		axis y line=none,
+		legend style={draw=none},
+		legend entries={$68.3\%$,$27.2\%$,$4.2\%$,$0.2\%$},
+		ticklabel style = {font=\tiny}, 
+	]		
+		
+
+		\addlegendimage{only marks, mark=*, opacity=0.8, fill=red!20, mark size=0.25em}
+		\addlegendimage{only marks, mark=*, opacity=0.8, fill=orange!20, mark size=0.25em}
+		\addlegendimage{only marks, mark=*, opacity=0.8, fill=yellow!20, mark size=0.25em}
+		\addlegendimage{only marks, mark=*, opacity=0.8, fill=white, mark size=0.25em}
+
+		\addplot [fill=red!20, fill opacity=0.8, domain=-1:1] {gauss(0,1)} \closedcycle;
+		\addplot [fill=orange!20, fill opacity=0.8, domain=-2:-1] 
+		{gauss(0,1)} \closedcycle;
+		\addplot [fill=yellow!20, fill opacity=0.8, domain=-3:-2] 
+		{gauss(0,1)} \closedcycle;
+		\addplot [fill=yellow!20, fill opacity=0.8, domain=2:3] 
+		{gauss(0,1)} \closedcycle;
+		\addplot [fill=orange!20, fill opacity=0.8, domain=1:2] 
+		{gauss(0,1)} \closedcycle;
+		\addplot [fill=white, fill opacity=0.8, domain=-10:-3] 
+		{gauss(0,1)} \closedcycle;
+		\addplot [fill=white, fill opacity=0.8, domain=3:10] 
+		{gauss(0,1)} \closedcycle;
+    
+		%node[text=black, fill opacity=1, above,yshift=0.05cm,pos=0.5] {$x^2$} 
+		%\draw[black!20,mark=*, thick, dotted] (axis cs:0,0) -- (axis cs:0.4,0.4) node[left]{Text};
+		%\node[above,black,font=\tiny] at (axis cs:1,0) {$\mu$};
+	\end{axis}
+\end{tikzpicture}
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item $Y \sim \mathcal{N}(\mu_Y,\sigma_Y^2)$ and $Z \sim \mathcal{N}(\mu_Z,\sigma_Z^2)$ then $X+Y \sim \mathcal{N}(\mu_Y+\mu_Z, \sigma_Y^2+\sigma_Z^2)$
+\end{listb}
+
+
+\subsection{Exponential Distribution}
+{\renewcommand{\arraystretch}{2}
+\begin{tabularx}{\hsize}{s|b}
+	\hline
+	Notation & $X \sim \mathrm{Exp}(\lambda)$ \\ 
+	Experiment & What is the probability that there are $x$ units of time until the next event, knowing that on average $\lambda$ events happen in one unit of time? \\
+	Support & $x\in[0,\infty)$ \\
+	$f_X(x)$ & $\begin{cases}
+					\lambda e^{-\lambda x} & x\geq 0 \\
+					0 & x < 0 
+				\end{cases}$ \\[1em]
+	$F_X(x)$ & $\begin{cases}
+					1-e^{-\lambda x} & x\geq 0 \\
+					0 & x < 0 
+				\end{cases}$ \\[1em]
+	$\mathbb{E}\left[X\right]$ & $\displaystyle\frac{1}{\lambda}$ \\
+	$\Var\left[X\right]$ & $\displaystyle\frac{1}{\lambda^2}$ \\[1em]
+	\hline
+\end{tabularx}}
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item \textit{Memoryless:}\\ $P\left[X>m+n\mid X\geq m\right] = P\left[X>n\right]$ 
+\end{listb}
+
+\subsection{Gamma Distribution}
+{\renewcommand{\arraystretch}{2}
+\begin{tabularx}{\hsize}{s|b}
+	\hline
+	Notation & $X \sim \mathrm{Ga}(\alpha,\lambda)$ \\ 
+	Experiment & What is the probability that there are $x$ units of time until the next $\alpha$ events, knowing that on average $\lambda$ events happen in one unit of time? \\
+	Support & $x\in\R^+$ \\
+	$f_X(x)$ & $\begin{cases}
+					\frac{1}{\Gamma(\alpha)}\lambda^\alpha x^{\alpha-1}e^{-\lambda x} & x\geq 0 \\
+					0 & x < 0 
+				\end{cases}$ \\
+	$F_X(x)$ & $\int_{0}^{x}f_X(t)dt$ \\
+	$\mathbb{E}\left[X\right]$ & $\displaystyle\frac{\alpha}{\lambda}$ \\
+	$\Var\left[X\right]$ & $\displaystyle\frac{\alpha}{\lambda^2}$ \\[1em]
+	\hline
+\end{tabularx}}
+\begin{listb}
+	\item [] \textbf{Note}
+	\item The gamma function $\Gamma(z)$ is the continuous analogous of the factorial: $\Gamma(n)=(n-1)!$ for $n>0$, and is defined as $\Gamma(z)=\int_{0}^{\infty}x^{z-1}e^{-x}dx$.
+	\item [] \textbf{Properties}
+	\item If $X=\sum_{i=1}^{\alpha} Y_i$ with $Y_i \ i.i.d. \sim\mathrm{Exp(\lambda)}$ then $X \sim \mathrm{Ga(\alpha, \lambda)}$
+	\item $Ga(1,\lambda)=Exp(\lambda)$
+\end{listb}
+
+\subsection{Beta Distribution}
+{\renewcommand{\arraystretch}{2}
+\begin{tabularx}{\hsize}{s|b}
+	\hline
+	Notation & $X \sim \mathrm{Beta}(\alpha,\beta)$ \\ 
+	Experiment & - \\
+	Support & $x\in[0,1]$ \\
+	$f_X(x)$ & $\begin{cases}
+		\displaystyle\frac{x^{\alpha-1}(1-x)^{\beta-1}}{B(\alpha,\beta)} & x\in[0,1] \\
+		0 & \text{else} 
+	\end{cases}$\\
+	& $B(\alpha,\beta)=\frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta)}$ \\
+	$F_X(x)$ & $\int_{0}^{x}f_X(t)dt$ \\
+	$\mathbb{E}\left[X\right]$ & $\displaystyle\frac{\alpha}{\alpha+\beta}$ \\
+	$\Var\left[X\right]$ & $\displaystyle \frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$ \\[1em]
+	\hline
+\end{tabularx}}
+
+\subsection{$\bm{\chi^2}$ Distribution}
+{\renewcommand{\arraystretch}{2}
+\begin{tabularx}{\hsize}{s|b}
+	\hline
+	Notation & $X \sim \mathrm{\chi^2}(k)$ \\ 
+	Experiment & - \\
+	Support & $x\in[0,\infty)$ or $x\in(0,\infty)$ if $k=1$ \\
+	$f_X(x)$ & $\begin{cases}
+					\displaystyle\frac{1}{2^{\frac{k}{2}}\Gamma(\frac{k}{2})} x^{\frac{k}{2}-1} e^{-\frac{x}{2}} & x\geq 0 \\
+					0 & x < 0
+				\end{cases}$\\
+	$F_X(x)$ & $\int_{-\infty}^{x}f_X(t)dt$ \\
+	$\mathbb{E}\left[X\right]$ & $k$ \\
+	$\Var\left[X\right]$ & $2k$ \\[1em]
+	\hline
+\end{tabularx}}
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item Let $X_1,\dots,X_n$ i.i.d. $X_i\sim \mathcal{N}(0,1)$ then $Y=\sum_{i=1}^{n}X_i^2 \sim \mathrm{\chi^2}(n)$
+	\item $X \sim \mathrm{\chi^2}(n) \Leftrightarrow X \sim \mathrm{Ga}(\alpha=\frac{n}{2},\lambda=\frac{1}{2})$ 
+\end{listb}
+\colnull 
+
+\subsection{t-Distribution}
+{\renewcommand{\arraystretch}{2}
+\begin{tabularx}{\hsize}{s|b}
+	\hline
+	Notation & $X \sim \mathrm{t}(n)$ \\ 
+	Experiment & - \\
+	Support & $x\in\R$ \\
+	$f_X(x)$ & $\displaystyle\frac{\Gamma(\frac{n+1}{2})}{\sqrt{n\pi}\Gamma\left(\frac{n}{2}\right)}\left(1+\frac{x^2}{n}\right)^{-\frac{n+1}{2}}$\\
+	$F_X(x)$ & $t_{n,x} \ $ \textit{(use t-table)} \\
+	$\mathbb{E}\left[X\right]$ & $0$ \\
+	$\Var\left[X\right]$ & $\displaystyle\frac{n}{n-2}$ \\[1em]
+	\hline
+\end{tabularx}}
+\begin{listb}
+	\item [] \textbf{Properties}
+	\item $X \sim \mathrm{t}(n=1) \Rightarrow X \sim \mathrm{Cauchy}$
+	\item $X \sim \mathrm{t}(n\to\infty) \Rightarrow X \sim \mathcal{N}(0,1)$
+	\item If $n>30$ we can usually approximate the $t$-distribution with a normal distribution.
+\end{listb}
+
+
+\subsection{Cauchy Distribution}
+{\renewcommand{\arraystretch}{2}
+\begin{tabularx}{\hsize}{s|b}
+	\hline
+	Notation & $X \sim \mathrm{Cauchy}(t, s)$ \\ 
+	Experiment & - \\
+	Support & $x\in\R$ \\
+	$f_X(x)$ & $\displaystyle\frac{1}{\pi s\left(1+\left(\frac{x-t}{s}\right)^2\right)}$\\
+	$F_X(x)$ & $\displaystyle\frac{1}{2} + \frac{1}{\pi}\arctan\left(\frac{x-t}{s}\right)$ \\
+	$\mathbb{E}\left[X\right]$ & \textit{undefined} \\
+	$\Var\left[X\right]$ & \textit{undefined} \\
+	\hline
+\end{tabularx}}
+
+
+
+
+\iffalse
+
+\colfill
+\section{Tables}
+\newcolumntype{r}{>{\hsize=0.65\hsize}X}
+\newcolumntype{v}{>{\hsize=1.35\hsize}X}
+\subsection{Derivatives}
+
+{\renewcommand{\arraystretch}{1.5}
+\noindent
+\begin{tabularx}{\hsize}{r|v}
+	\hline
+	$f(x)$ & $f'(x)=\frac{df}{dx}$ \\ 
+	\hline 
+	$x$ & $1$ \\
+	$x^n$ & $nx^{n-1}$ \\ 
+	$|x|$ & $sign(x)$ \\
+	$e^x$ & $e^x$ \\
+	$a^x$ & $a^x\ln(a)$ \\
+	$\frac{1}{x}$ & $-\frac{1}{x^2}$ \\
+	$\sqrt{x}$ & $\frac{1}{2\sqrt{x}}$ \\
+	$\ln(x)$ & $\frac{1}{x}$ \\
+	$\log_{a}(x)$ & $\frac{1}{xln(a)},\ x>0$ \\
+	$\sin(x)$ & $\cos(x)$ \\
+	$\cos(x)$ & $-\sin(x)$ \\
+	$\tan(x)$ & $\sec^2(x) = \tan^2(x)+1$ \\
+	\hline
+\end{tabularx}}
+
+\subsection{Integrals}
+{\renewcommand{\arraystretch}{1.5}
+\noindent 
+\begin{tabularx}{\hsize}{r|v}
+	\hline
+	$f(x)$ & $F(x) = \int f(x)dx$ \\ 
+	\hline
+	$k$ & $kx$ \\
+	$x^n$ & $\frac{x^{n+1}}{n+1}, \ n\neq-1$ \\
+	$\frac{1}{x^n}$ & $\frac{-1}{(n-1)x^{n-1}}$ \\
+	$x^{-1} = \frac{1}{x}$ & $\ln|x|$ \\
+	$a^x $ & $\frac{a^x}{ln(a)}$ \\
+	$e^x $ & $e^x$ \\
+	$\log_a(x)$ & $x\log_a(x)-x\log_a(e)$ \\
+	$\sin(ax)$ & $-\frac{1}{a}\cos(ax)$ \\
+	$\cos(ax)$ & $\frac{1}{a}\sin(ax)$ \\
+	\hline
+\end{tabularx}}
+\colnull
+\section{Notes} 
+\begin{listb}
+	\item \textbf{Min/Max RV}: Let $\vec{X}=(X_1,\dots,X_n) \ i.i.d.$, $X_{(1)}=\min(\vec{X})$, $X_{(n)}=\max(\vec{X})$, then: \\
+	$f_{X_{(1)}}(t)=n(1-F_X(t))f_X(t)$\\ 
+	$f_{X_{(n)}}(t)=n(F_X(t))^{n-1}f_X(t)$\\
+	$F_{X_{(1)}}(t)=1-(1-F_X(t))^n$\\
+	$F_{X_{(n)}}(t)=(F_X(t))^n$
+\end{listb}
+
+\colfill
+
+\fi 
+%TODO: absolute value probabilities. 
+
+\end{multicols}
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
